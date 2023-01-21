@@ -1,7 +1,6 @@
 <Project>
   <PropertyGroup>
     <LangVersion>10</LangVersion>
-    <RuntimeIdentifiers>linux-x64;</RuntimeIdentifiers>
     <TargetFrameworks>net6.0;</TargetFrameworks>
   </PropertyGroup>
 </Project>
