@@ -3,7 +3,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 
-var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
+var handler = (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var connectionId = request.RequestContext.ConnectionId;
 
