@@ -31,7 +31,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var clientRequest = JsonSerializer.Deserialize<SocketMessage<X01ScoreRequest>>(request.Body,
              new JsonSerializerOptions
              {
-                 PropertyNameCaseInsensitive = true
+                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
              });
         Console.WriteLine(request.Body);
         var putItemRequest = new PutItemRequest

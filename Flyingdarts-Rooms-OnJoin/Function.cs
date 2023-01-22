@@ -9,6 +9,7 @@ using Flyingdarts.Signalling.Shared;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 
@@ -30,7 +31,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var clientRequest = JsonSerializer.Deserialize<SocketMessage<RoomJoinedRequest>>(request.Body,
             new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             });
         var putItemRequest = new PutItemRequest
         {
