@@ -1,4 +1,4 @@
-name: "Deploy OnConnect"
+name: "Deploy OnScore"
 on:
   push:
     branches: [ main ]

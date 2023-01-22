@@ -25,7 +25,6 @@ Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClient
 
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-
     try
     {
         var connectionId = request.RequestContext.ConnectionId;
@@ -40,7 +39,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             };
         }
 
-        var roomId = Guid.Parse(dataProperty.GetString()!.Split("#")[0]);
+        var roomId = dataProperty.GetString()!.Split("#")[0];
         var playerId = Guid.Parse(dataProperty.GetString()!.Split("#")[1]);
         var score = int.Parse(dataProperty.GetString()!.Split("#")[2]);
         var input = int.Parse(dataProperty.GetString()!.Split("#")[3]);

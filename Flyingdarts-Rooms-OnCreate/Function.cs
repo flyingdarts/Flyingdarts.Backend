@@ -30,7 +30,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         var data = dataProperty.GetString()!.Split("#");
 
-        var roomId = Guid.Parse(data[0]).ToString().ToLower();
+        var roomId =data[0];
         var playerId = Guid.Parse(data[1]).ToString().ToLower();
         var playerName = data[3];
 
