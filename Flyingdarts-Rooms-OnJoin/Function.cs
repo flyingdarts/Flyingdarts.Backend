@@ -48,6 +48,21 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         await _dynamoDbClient.PutItemAsync(putItemRequest);
 
+        // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
+        var scanRequest = new ScanRequest
+        {
+            TableName = _tableName,
+            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
+        };
+
+        var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
+
+        if (!scanResponse.Items.Any())
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = 200
+            };
+
         // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
         var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
 
@@ -58,15 +73,6 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-
-        // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
-        var scanRequest = new ScanRequest
-        {
-            TableName = _tableName,
-            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId},{Fields.PlayerName}"
-        };
-
-        var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
         var connectedClientsInRoom =
             scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId && x[Fields.PlayerId].S != clientRequest.Message.PlayerId.ToString()).ToList();
