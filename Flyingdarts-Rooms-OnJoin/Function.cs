@@ -27,7 +27,11 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
     try
     {
         var connectionId = request.RequestContext.ConnectionId;
-        var clientRequest = JsonSerializer.Deserialize<SocketMessage<RoomJoinedRequest>>(request.Body);
+        var clientRequest = JsonSerializer.Deserialize<SocketMessage<RoomJoinedRequest>>(request.Body,
+            new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
         var putItemRequest = new PutItemRequest
         {
             TableName = _tableName,
