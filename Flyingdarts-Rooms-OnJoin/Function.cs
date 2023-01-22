@@ -73,20 +73,20 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanRequest = new ScanRequest
         {
             TableName = _tableName,
-            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
+            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId},{Fields.PlayerName}"
         };
 
         var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
         var connectedClientsInRoom =
-            scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId);
+            scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId).ToList();
 
         if (connectedClientsInRoom.Any())
         {
             var returnToClientData = JsonSerializer.Serialize(new
             {
                 action = "lobby/joined",
-                message = connectedClientsInRoom.Select(x => x[Fields.PlayerId].S).ToArray()
+                message = connectedClientsInRoom.Select(x => x[Fields.PlayerName].S).ToArray()
             });
 
             var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
