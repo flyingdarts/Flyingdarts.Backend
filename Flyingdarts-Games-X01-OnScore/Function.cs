@@ -42,8 +42,9 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                 { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
                 { Fields.RoomId, new AttributeValue{ S = clientRequest.Message.RoomId } },
                 { Fields.PlayerId, new AttributeValue{ S = clientRequest.Message.PlayerId.ToString() } },
+                { Fields.PlayerName, new AttributeValue { S = clientRequest.Message.PlayerName} },
                 { Fields.CurrentScore, new AttributeValue{ N = clientRequest.Message.Score.ToString() }},
-                { Fields.LastInput, new AttributeValue{ N = clientRequest.Message.Input.ToString() } }
+                { Fields.LastInput, new AttributeValue{ N = clientRequest.Message.Input.ToString() } },
             }
         };
 
