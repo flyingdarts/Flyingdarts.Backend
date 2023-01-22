@@ -6,6 +6,8 @@ public class X01ScoreRequest
     public string RoomId { get; set; }
     [JsonPropertyName("playerId")]
     public Guid PlayerId { get; set; }
+    [JsonPropertyName("playerName")]
+    public string PlayerName { get; set; }
     [JsonPropertyName("score")]
     public int Score { get; set; }
     [JsonPropertyName("input")]
