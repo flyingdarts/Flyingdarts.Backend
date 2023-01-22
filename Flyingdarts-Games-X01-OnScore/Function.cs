@@ -56,7 +56,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "x01/score-updated",
-            message = JsonSerializer.Serialize(clientRequest.Message)
+            message = clientRequest.Message
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
