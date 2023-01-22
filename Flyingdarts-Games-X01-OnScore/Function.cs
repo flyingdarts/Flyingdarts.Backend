@@ -28,21 +28,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
     try
     {
         var connectionId = request.RequestContext.ConnectionId;
-        JsonDocument message = JsonDocument.Parse(request.Body);
-        JsonElement dataProperty;
-        if (!message.RootElement.TryGetProperty("message", out dataProperty) || dataProperty.GetString() == null)
-        {
-            context.Logger.LogInformation("Failed to find data element in JSON document");
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest
-            };
-        }
-
-        var roomId = dataProperty.GetString()!.Split("#")[0];
-        var playerId = Guid.Parse(dataProperty.GetString()!.Split("#")[1]);
-        var score = int.Parse(dataProperty.GetString()!.Split("#")[2]);
-        var input = int.Parse(dataProperty.GetString()!.Split("#")[3]);
+        var clientRequest = JsonSerializer.Deserialize<SocketMessage<X01ScoreRequest>>(request.Body);
 
         var putItemRequest = new PutItemRequest
         {
@@ -50,10 +36,10 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             Item = new Dictionary<string, AttributeValue>
             {
                 { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
-                { Fields.RoomId, new AttributeValue{ S = roomId.ToString().ToLower() } },
-                { Fields.PlayerId, new AttributeValue{ S = playerId.ToString().ToLower() } },
-                { Fields.CurrentScore, new AttributeValue{ N = score.ToString() }},
-                { Fields.LastInput, new AttributeValue{ N = input.ToString() } }
+                { Fields.RoomId, new AttributeValue{ S = clientRequest.Message.RoomId } },
+                { Fields.PlayerId, new AttributeValue{ S = clientRequest.Message.PlayerId.ToString() } },
+                { Fields.CurrentScore, new AttributeValue{ N = clientRequest.Message.Score.ToString() }},
+                { Fields.LastInput, new AttributeValue{ N = clientRequest.Message.Input.ToString() } }
             }
         };
 
@@ -65,7 +51,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "x01/score-updated",
-            message = $"{playerId}#{input}"
+            message = JsonSerializer.Serialize(clientRequest.Message)
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
@@ -78,7 +64,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
-        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId.ToString().ToLower());
+        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId);
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;

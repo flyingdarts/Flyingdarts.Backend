@@ -27,32 +27,16 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
     try
     {
         var connectionId = request.RequestContext.ConnectionId;
-        JsonDocument message = JsonDocument.Parse(request.Body);
-        JsonElement dataProperty;
-        if (!message.RootElement.TryGetProperty("message", out dataProperty) || dataProperty.GetString() == null)
-        {
-            context.Logger.LogInformation("Failed to find data element in JSON document");
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest
-            };
-        }
-
-        var requestData = dataProperty.GetString()!.Split("#");
-
-        var roomId = requestData[0];
-        var playerId = Guid.Parse(requestData[1]).ToString().ToLower();
-        var playerName = requestData[2];
-
+        var clientRequest = JsonSerializer.Deserialize<SocketMessage<RoomJoinedRequest>>(request.Body);
         var putItemRequest = new PutItemRequest
         {
             TableName = _tableName,
             Item = new Dictionary<string, AttributeValue>
                 {
                     { Fields.ConnectionId, new AttributeValue { S = connectionId } },
-                    { Fields.RoomId, new AttributeValue { S = roomId } },
-                    { Fields.PlayerId, new AttributeValue { S = playerId } },
-                    { Fields.PlayerName, new AttributeValue { S = playerName } }
+                    { Fields.RoomId, new AttributeValue { S = clientRequest!.Message.RoomId } },
+                    { Fields.PlayerId, new AttributeValue { S = clientRequest.Message.PlayerId.ToString()} },
+                    { Fields.PlayerName, new AttributeValue { S = clientRequest.Message.PlayerName } }
                 }
         };
 
@@ -64,7 +48,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "room/joined",
-            message = playerId
+            message = JsonSerializer.Serialize(clientRequest.Message)
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
@@ -79,7 +63,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
         var connectedClientsInRoom =
-            scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId && x[Fields.PlayerId].S != playerId).ToList();
+            scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId && x[Fields.PlayerId].S != clientRequest.Message.PlayerId.ToString()).ToList();
 
         if (connectedClientsInRoom.Any())
         {
