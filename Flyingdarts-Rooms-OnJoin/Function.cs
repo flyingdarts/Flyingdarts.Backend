@@ -69,32 +69,12 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "room/joined",
-            message = JsonSerializer.Serialize(clientRequest.Message)
+            message = clientRequest.Message
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
 
-        var connectedClientsInRoom =
-            scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId && x[Fields.PlayerId].S != clientRequest.Message.PlayerId.ToString()).ToList();
-
-        if (connectedClientsInRoom.Any())
-        {
-            var returnToClientData = JsonSerializer.Serialize(new
-            {
-                action = "lobby/joined",
-                message = connectedClientsInRoom.Select(x => x[Fields.PlayerName].S).ToArray()
-            });
-
-            var returnToClientDataStream = new MemoryStream(Encoding.UTF8.GetBytes(returnToClientData));
-
-            var returnToClientRequest = new PostToConnectionRequest
-            {
-                ConnectionId = connectionId,
-                Data = returnToClientDataStream
-            };
-
-            await apiClient.PostToConnectionAsync(returnToClientRequest);
-        }
+        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId);
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
@@ -124,19 +104,17 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                     {
                         TableName = _tableName,
                         Key = new Dictionary<string, AttributeValue>
-                            {
-                                { Fields.ConnectionId, new AttributeValue { S = postConnectionRequest.ConnectionId } }
-                            }
+                        {
+                            {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
+                        }
                     };
 
-                    context.Logger.LogInformation(
-                        $"Deleting gone connection: {postConnectionRequest.ConnectionId}");
+                    context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
                     await _dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
                 }
                 else
                 {
-                    context.Logger.LogInformation(
-                        $"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
+                    context.Logger.LogInformation($"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
                     context.Logger.LogInformation(e.StackTrace);
                 }
             }
