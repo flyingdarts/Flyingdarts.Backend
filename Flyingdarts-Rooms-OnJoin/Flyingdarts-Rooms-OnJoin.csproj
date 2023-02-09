@@ -19,7 +19,7 @@
 		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
 		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.0" />
 		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.29" />
-		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.58" />
+		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.70" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Flyingdarts-Signalling-Shared\Flyingdarts-Signalling-Shared.csproj" />
