@@ -24,7 +24,8 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
     try
     {
-        var socketRequest = SocketRequest<JoinRoomRequest>.FromAPIGatewayProxyRequest(request);
+        var socketRequest = JsonSerializer.Deserialize<JoinRoomRequest>(request.Body);
+        socketRequest.ConnectionId = request.RequestContext.ConnectionId;
         var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
         var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest
@@ -38,10 +39,10 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "room/on-join",
-            message = socketRequest.Message
+            message = socketRequest
         });
 
-        await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.Message.RoomId);
+        await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.RoomId);
 
         return new APIGatewayProxyResponse
         {

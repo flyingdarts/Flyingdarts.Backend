@@ -15,7 +15,8 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
-        var socketRequest = SocketRequest<CreateRoomRequest>.FromAPIGatewayProxyRequest(request);
+        var socketRequest = JsonSerializer.Deserialize<CreateRoomRequest>(request.Body);
+        socketRequest!.ConnectionId = request.RequestContext.ConnectionId;
         var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
         var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest

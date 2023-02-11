@@ -1,18 +1,15 @@
 using Amazon.ApiGatewayManagementApi;
-using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Flyingdarts.Signalling.Shared;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests.Games.X01.OnScore;
-using Amazon.Runtime;
 
 AmazonDynamoDBClient _dynamoDbClient = new();
 string _tableName = Environment.GetEnvironmentVariable("TableName")!;
@@ -23,7 +20,10 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
-        var socketRequest = SocketRequest<X01OnScoreRequest>.FromAPIGatewayProxyRequest(request);
+        var socketRequest = JsonSerializer.Deserialize<X01OnScoreRequest>(request.Body);
+
+        socketRequest.ConnectionId = request.RequestContext.ConnectionId;
+
         var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
         var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest
@@ -37,10 +37,10 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var data = JsonSerializer.Serialize(new
         {
             action = "x01/on-score",
-            message = socketRequest.Message
+            message = socketRequest
         });
 
-        await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.Message.RoomId);
+        await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.RoomId);
 
         return new APIGatewayProxyResponse
         {
