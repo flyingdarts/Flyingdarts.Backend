@@ -9,12 +9,10 @@ using Flyingdarts.Signalling.Shared;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests.Rooms.Join;
-using Flyingdarts.Requests.Rooms.Create;
 
 var _dynamoDbClient = new AmazonDynamoDBClient();
 var _tableName = Environment.GetEnvironmentVariable("TableName")!;
@@ -37,74 +35,13 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         await _dynamoDbClient.PutItemAsync(putItemRequest);
 
-        // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
-        var scanRequest = new ScanRequest
-        {
-            TableName = _tableName,
-            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId},{Fields.PlayerId}"
-        };
-
-        var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
-
-        if (!scanResponse.Items.Any())
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = 200
-            };
-
         var data = JsonSerializer.Serialize(new
         {
             action = "room/on-join",
             message = socketRequest.Message
         });
 
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-
-        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == socketRequest.Message.RoomId);
-
-        // Loop through all of the connections and broadcast the message out to the connections.
-        var count = 0;
-        foreach (var item in connectedClientsInRoom)
-        {
-            var postConnectionRequest = new PostToConnectionRequest
-            {
-                ConnectionId = item[Fields.ConnectionId].S,
-                Data = stream
-            };
-
-            try
-            {
-                context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
-                stream.Position = 0;
-                await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest);
-                count++;
-            }
-            catch (AmazonServiceException e)
-            {
-                // API Gateway returns a status of 410 GONE then the connection is no
-                // longer available. If this happens, delete the identifier
-                // from our DynamoDB table.
-                if (e.StatusCode == HttpStatusCode.Gone)
-                {
-                    var ddbDeleteRequest = new DeleteItemRequest
-                    {
-                        TableName = _tableName,
-                        Key = new Dictionary<string, AttributeValue>
-                        {
-                            {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
-                        }
-                    };
-
-                    context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
-                    await _dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
-                }
-                else
-                {
-                    context.Logger.LogInformation($"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
-                    context.Logger.LogInformation(e.StackTrace);
-                }
-            }
-        }
+        await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.Message.RoomId);
 
         return new APIGatewayProxyResponse
         {
@@ -123,6 +60,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         };
     }
 };
+
 // Build the Lambda runtime client passing in the handler to call for each
 // event and the JSON serializer to use for translating Lambda JSON documents
 // to .NET types.
