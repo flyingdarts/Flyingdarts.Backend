@@ -6,7 +6,7 @@ using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests.Rooms.Create;
 
-var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = false);
+var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 AmazonDynamoDBClient dynamoDbClient = new();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
