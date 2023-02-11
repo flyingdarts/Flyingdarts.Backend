@@ -2,53 +2,43 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using System.Net;
-using System.Text.Json;
-using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests.Rooms.Create;
 
-AmazonDynamoDBClient _dynamoDbClient = new();
-string _tableName = Environment.GetEnvironmentVariable("TableName")!;
+var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = false);
+AmazonDynamoDBClient dynamoDbClient = new();
+var tableName = Environment.GetEnvironmentVariable("TableName")!;
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
+    var socketRequest = request.To<CreateRoomRequest>(serializer);
     try
     {
-        var socketRequest = JsonSerializer.Deserialize<CreateRoomRequest>(request.Body);
-        socketRequest!.ConnectionId = request.RequestContext.ConnectionId;
-        var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
-        var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest
         {
-            TableName = _tableName,
-            Item = putItemRequestAttributes
+            TableName = tableName,
+            Item = new Dictionary<string, AttributeValue>
+            {
+                {
+                    nameof(CreateRoomRequest.ConnectionId), new AttributeValue(socketRequest.ConnectionId)
+                },
+                {
+                    nameof(CreateRoomRequest.RoomId), new AttributeValue(socketRequest.RoomId)
+                }
+            }
         };
-
-        await _dynamoDbClient.PutItemAsync(putItemRequest);
-
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.Created,
-            Body = "Room Created"
-        };
+        await dynamoDbClient.PutItemAsync(putItemRequest);
+        return Responses.Created("Room Created");
     }
-    catch (Exception e)
+    catch (AmazonDynamoDBException e)
     {
-        context.Logger.LogInformation("Error disconnecting: " + e.Message);
-        context.Logger.LogInformation(e.StackTrace);
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.InternalServerError,
-            Body = $"Failed to send message: {e.Message}"
-        };
+        return Responses.InternalServerError($"Failed to send message: {e.Message}");
     }
-
 };
 
 // Build the Lambda runtime client passing in the handler to call for each
 // event and the JSON serializer to use for translating Lambda JSON documents
 // to .NET types.
-await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
+await LambdaBootstrapBuilder.Create(handler, serializer)
     .Build()
     .RunAsync();
