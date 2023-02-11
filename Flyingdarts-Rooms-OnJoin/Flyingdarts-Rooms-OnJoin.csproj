@@ -23,5 +23,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Flyingdarts-Signalling-Shared\Flyingdarts-Signalling-Shared.csproj" />
+		<ProjectReference Include="..\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
 	</ItemGroup>
 </Project>

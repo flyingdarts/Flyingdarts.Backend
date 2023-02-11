@@ -1,7 +1,8 @@
 name: "Deploy OnDisconnect"
 on:
-  push:
+  merge_group:
     branches: [ main ]
+  workflow_dispatch:
 jobs:
   OnDisconnect:
     runs-on: ubuntu-latest

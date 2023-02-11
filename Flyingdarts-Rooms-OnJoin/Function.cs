@@ -10,40 +10,29 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Flyingdarts.Requests.Rooms.Join;
+using Flyingdarts.Requests.Rooms.Create;
 
 var _dynamoDbClient = new AmazonDynamoDBClient();
 var _tableName = Environment.GetEnvironmentVariable("TableName")!;
 var _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) =>
-    new AmazonApiGatewayManagementApiClient(
-        new AmazonApiGatewayManagementApiConfig
-        {
-            ServiceURL = endpoint
-        });
+AmazonApiGatewayManagementApiClient _apiGatewayClient = new(new AmazonApiGatewayManagementApiConfig { ServiceURL = _webSocketApiUrl });
+
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
 
     try
     {
-        var connectionId = request.RequestContext.ConnectionId;
-        Console.WriteLine(request.Body);
-        var clientRequest = JsonSerializer.Deserialize<SocketMessage<RoomJoinedRequest>>(request.Body,
-            new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+        var socketRequest = SocketRequest<JoinRoomRequest>.FromAPIGatewayProxyRequest(request);
+        var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
+        var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest
         {
             TableName = _tableName,
-            Item = new Dictionary<string, AttributeValue>
-                {
-                    { Fields.ConnectionId, new AttributeValue { S = connectionId } },
-                    { Fields.RoomId, new AttributeValue { S = clientRequest!.Message.RoomId } },
-                    { Fields.PlayerId, new AttributeValue { S = clientRequest.Message.PlayerId.ToString()} },
-                    { Fields.PlayerName, new AttributeValue { S = clientRequest.Message.PlayerName } }
-                }
+            Item = putItemRequestAttributes
         };
 
         await _dynamoDbClient.PutItemAsync(putItemRequest);
@@ -63,18 +52,15 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                 StatusCode = 200
             };
 
-        // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-        var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
-
         var data = JsonSerializer.Serialize(new
         {
-            action = "room/joined",
-            message = clientRequest.Message
+            action = "room/on-join",
+            message = socketRequest.Message
         });
 
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
 
-        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId);
+        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == socketRequest.Message.RoomId);
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
@@ -90,7 +76,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             {
                 context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
                 stream.Position = 0;
-                await apiClient.PostToConnectionAsync(postConnectionRequest);
+                await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest);
                 count++;
             }
             catch (AmazonServiceException e)

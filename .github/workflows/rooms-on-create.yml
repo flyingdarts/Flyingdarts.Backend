@@ -1,10 +1,10 @@
-name: "Deploy OnScore"
+name: "Deploy Rooms OnCreate"
 on:
   merge_group:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  OnConnect:
+  OnCreate:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -27,6 +27,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy function
-        working-directory: "Flyingdarts-Games-X01-OnScore"
+        working-directory: "Flyingdarts-Rooms-OnCreate"
         run: |
-          dotnet lambda deploy-function --function-name Flyingdarts-Games-X01-OnScore -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name Flyingdarts-Rooms-OnCreate -frun dotnet6 --region eu-west-1

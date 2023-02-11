@@ -4,62 +4,43 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using Amazon.Runtime;
 using Flyingdarts.Signalling.Shared;
 using System.Net;
 using System.Text;
 using System.Text.Json;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Flyingdarts.Requests.Games.X01.OnScore;
+using Amazon.Runtime;
 
 AmazonDynamoDBClient _dynamoDbClient = new();
 string _tableName = Environment.GetEnvironmentVariable("TableName")!;
 string _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-Func<string, AmazonApiGatewayManagementApiClient> _apiGatewayManagementApiClientFactory = (endpoint) =>
-{
-    return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
-    {
-        ServiceURL = endpoint
-    });
-};
+AmazonApiGatewayManagementApiClient _apiGatewayClient = new(new AmazonApiGatewayManagementApiConfig { ServiceURL = _webSocketApiUrl });
 
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
-        var connectionId = request.RequestContext.ConnectionId;
-        Console.WriteLine(request.Body);
-        var clientRequest = JsonSerializer.Deserialize<SocketMessage<X01ScoreRequest>>(request.Body,
-             new JsonSerializerOptions
-             {
-                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-             });
+        var socketRequest = SocketRequest<X01OnScoreRequest>.FromAPIGatewayProxyRequest(request);
+        var requestDocument = Document.FromJson(JsonSerializer.Serialize(socketRequest));
+        var putItemRequestAttributes = requestDocument.ToAttributeMap();
         var putItemRequest = new PutItemRequest
         {
             TableName = _tableName,
-            Item = new Dictionary<string, AttributeValue>
-            {
-                { Fields.ConnectionId, new AttributeValue{ S = connectionId } },
-                { Fields.RoomId, new AttributeValue{ S = clientRequest.Message.RoomId } },
-                { Fields.PlayerId, new AttributeValue{ S = clientRequest.Message.PlayerId.ToString() } },
-                { Fields.PlayerName, new AttributeValue { S = clientRequest.Message.PlayerName} },
-                { Fields.CurrentScore, new AttributeValue{ N = clientRequest.Message.Score.ToString() }},
-                { Fields.LastInput, new AttributeValue{ N = clientRequest.Message.Input.ToString() } },
-            }
+            Item = putItemRequestAttributes
         };
 
         await _dynamoDbClient.PutItemAsync(putItemRequest);
 
-        // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-        var apiClient = _apiGatewayManagementApiClientFactory(_webSocketApiUrl);
-
         var data = JsonSerializer.Serialize(new
         {
-            action = "x01/score-updated",
-            message = clientRequest.Message
+            action = "x01/on-score",
+            message = socketRequest.Message
         });
 
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
         // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
         var scanRequest = new ScanRequest
         {
@@ -69,7 +50,9 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
         var scanResponse = await _dynamoDbClient.ScanAsync(scanRequest);
 
-        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == clientRequest.Message.RoomId);
+        var connectedClientsInRoom = scanResponse.Items
+            .Where(x => // Not includes request owner
+                x[Fields.PlayerId].S != socketRequest.Message.PlayerId.ToString().ToLower());
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
@@ -80,12 +63,11 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                 ConnectionId = item[Fields.ConnectionId].S,
                 Data = stream
             };
-
             try
             {
                 context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
                 stream.Position = 0;
-                await apiClient.PostToConnectionAsync(postConnectionRequest);
+                await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest);
                 count++;
             }
             catch (AmazonServiceException e)
@@ -113,6 +95,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                     context.Logger.LogInformation(e.StackTrace);
                 }
             }
+
         }
 
         return new APIGatewayProxyResponse

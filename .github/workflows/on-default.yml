@@ -1,7 +1,8 @@
 name: "Deploy OnDefault"
 on:
-  push:
+  merge_group:
     branches: [ main ]
+  workflow_dispatch:
 jobs:
   OnDefault:
     runs-on: ubuntu-latest

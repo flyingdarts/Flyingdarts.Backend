@@ -1,7 +1,8 @@
 name: "Deploy Rooms OnJoin"
 on:
-  push:
+  merge_group:
     branches: [ main ]
+  workflow_dispatch:
 jobs:
   OnJoin:
     runs-on: ubuntu-latest
