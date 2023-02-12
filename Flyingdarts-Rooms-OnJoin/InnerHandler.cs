@@ -10,7 +10,7 @@ public class InnerHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
-
+    public InnerHandler() { }
     public InnerHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
         _dynamoDb = dynamoDb;
