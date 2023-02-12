@@ -21,30 +21,9 @@ public class OnJoinHandler
 
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request, ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)
     {
-        PutItemRequest putItemRequest = null;
         try
         {
-
-            putItemRequest = new PutItemRequest
-            {
-                TableName = _tableName,
-                Item = new Dictionary<string, AttributeValue>
-                {
-                    {
-                        nameof(request.ConnectionId), new AttributeValue(request.ConnectionId)
-                    },
-                    {
-                        nameof(JoinRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
-                    },
-                    {
-                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.PlayerId)
-                    },
-                    {
-                        nameof(JoinRoomRequest.PlayerName), new AttributeValue(request.Message.PlayerName)
-                    }
-                }
-            };
-            await _dynamoDb.PutItemAsync(putItemRequest);
+            await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
 
             await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request.Message), request.Message.RoomId);
 
@@ -52,12 +31,54 @@ public class OnJoinHandler
         }
         catch (AmazonDynamoDBException e)
         {
-            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{JsonSerializer.Serialize(putItemRequest)}");
+            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
         }
         catch (Exception e)
         {
-            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{JsonSerializer.Serialize(putItemRequest)}");
+            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
         }
 
+    }
+    public static async Task<bool> UpdateItemAsync(
+        AmazonDynamoDBClient client,
+        string connectionId,
+        JoinRoomRequest request,
+        string tableName)
+    {
+        var key = new Dictionary<string, AttributeValue>
+        {
+            ["ConnectionId"] = new AttributeValue { S = connectionId },
+        };
+        var updates = new Dictionary<string, AttributeValueUpdate>
+        {
+            [nameof(JoinRoomRequest.RoomId)] = new AttributeValueUpdate
+            {
+                Action = AttributeAction.PUT,
+                Value = new AttributeValue { S = request.RoomId },
+            },
+
+            [nameof(JoinRoomRequest.PlayerId)] = new AttributeValueUpdate
+            {
+                Action = AttributeAction.PUT,
+                Value = new AttributeValue { S = request.PlayerId },
+            },
+
+            [nameof(JoinRoomRequest.PlayerName)] = new AttributeValueUpdate
+            {
+                Action = AttributeAction.PUT,
+                Value = new AttributeValue { S = request.PlayerName },
+            }
+        };
+
+        var updateItemRequest = new UpdateItemRequest
+        {
+            AttributeUpdates = updates,
+            Key = key,
+            TableName = tableName,
+        };
+
+        var response = await client.UpdateItemAsync(updateItemRequest);
+
+        return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
     }
 }
