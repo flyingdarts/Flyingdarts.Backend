@@ -33,10 +33,10 @@ public class InnerHandler
                         nameof(JoinRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
                     },
                     {
-                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.RoomId)
+                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.PlayerId.ToString())
                     },
                     {
-                        nameof(JoinRoomRequest.PlayerName), new AttributeValue(request.Message.RoomId)
+                        nameof(JoinRoomRequest.PlayerName), new AttributeValue(request.Message.PlayerName)
                     }
                 }
             };
