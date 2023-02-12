@@ -2,7 +2,7 @@
 namespace Flyingdarts.Signalling.Shared;
 
 
-public abstract class IAmAMessage<TMessage>
+public class IAmAMessage<TMessage>
 {
     public string Action { get; set; } = null!;
     public TMessage Message { get; set; } = default!;
