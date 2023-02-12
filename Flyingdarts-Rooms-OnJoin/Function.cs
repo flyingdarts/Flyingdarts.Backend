@@ -19,8 +19,7 @@ var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGate
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<JoinRoomRequest>(serializer);
-    await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(socketRequest.Message), socketRequest.Message.RoomId);
-    return await innerHandler.Handle(socketRequest);
+    return await innerHandler.Handle(socketRequest, context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(socketRequest.Message), socketRequest.Message.RoomId);
 };
 
 // Build the Lambda runtime client passing in the handler to call for each

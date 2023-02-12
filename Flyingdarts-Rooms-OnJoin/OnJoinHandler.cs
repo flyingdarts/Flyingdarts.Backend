@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
+using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.Core;
 using Flyingdarts.Requests.Rooms.Join;
 using Flyingdarts.Signalling.Shared;
 namespace Flyingdarts.Rooms.OnJoin;
@@ -17,10 +19,11 @@ public class OnJoinHandler
         _tableName = tableName;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request, ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)
     {
         try
         {
+
             var putItemRequest = new PutItemRequest
             {
                 TableName = _tableName,
@@ -41,6 +44,9 @@ public class OnJoinHandler
                 }
             };
             await _dynamoDb.PutItemAsync(putItemRequest);
+
+            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request.Message), request.Message.RoomId);
+
             return Responses.Created("Room Created");
         }
         catch (AmazonDynamoDBException e)
