@@ -1,9 +1,11 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Requests.Rooms.Create;
+using Flyingdarts.Requests.Rooms.Join;
 using Flyingdarts.Signalling.Shared;
-namespace Flyingdarts.Rooms.OnCreate;
+using System.Text.Json;
+using Flyingdarts.Requests.Games.X01.OnScore;
+namespace Flyingdarts.Games.X01.OnScore;
 public class InnerHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
@@ -15,7 +17,7 @@ public class InnerHandler
         _tableName = tableName;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<CreateRoomRequest> request)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<X01OnScoreRequest> request)
     {
         try
         {
@@ -28,11 +30,20 @@ public class InnerHandler
                         nameof(request.ConnectionId), new AttributeValue(request.ConnectionId)
                     },
                     {
-                        nameof(CreateRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
+                        nameof(X01OnScoreRequest.RoomId), new AttributeValue(request.Message.RoomId)
                     }
                 }
             };
             await _dynamoDb.PutItemAsync(putItemRequest);
+            
+            var data = JsonSerializer.Serialize(new
+            {
+                action = "x01/on-score",
+                message = request.Message
+            });
+
+            //await MessageDispatcher.DispatchMessage(_context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.RoomId);
+
             return Responses.Created("Room Created");
         }
         catch (AmazonDynamoDBException e)

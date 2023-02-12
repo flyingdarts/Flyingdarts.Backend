@@ -2,8 +2,10 @@
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Rooms.Create;
+using Flyingdarts.Requests.Rooms.Join;
 using Flyingdarts.Signalling.Shared;
-namespace Flyingdarts.Rooms.OnCreate;
+namespace Flyingdarts.Rooms.OnJoin;
+
 public class InnerHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
@@ -15,7 +17,7 @@ public class InnerHandler
         _tableName = tableName;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<CreateRoomRequest> request)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request)
     {
         try
         {
@@ -28,7 +30,13 @@ public class InnerHandler
                         nameof(request.ConnectionId), new AttributeValue(request.ConnectionId)
                     },
                     {
-                        nameof(CreateRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
+                        nameof(JoinRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
+                    },
+                    {
+                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.RoomId)
+                    },
+                    {
+                        nameof(JoinRoomRequest.PlayerName), new AttributeValue(request.Message.RoomId)
                     }
                 }
             };

@@ -1,6 +1,4 @@
-﻿using Flyingdarts.Signalling.Shared;
-
-namespace Flyingdarts.Requests.Rooms.Create;
+﻿namespace Flyingdarts.Requests.Rooms.Create;
 // ReSharper disable once ClassNeverInstantiated.Global
 public class CreateRoomRequest
 {

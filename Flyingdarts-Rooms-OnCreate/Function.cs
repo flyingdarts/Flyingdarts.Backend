@@ -4,6 +4,7 @@ using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests.Rooms.Create;
+using Flyingdarts.Rooms.OnCreate;
 using Flyingdarts.Signalling.Shared;
 
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
@@ -13,7 +14,7 @@ var innerHandler = new InnerHandler(dynamoDbClient, tableName);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    var socketRequest = request.To<IAmAMessage<CreateRoomRequest>>(serializer);
+    var socketRequest = request.To<CreateRoomRequest>(serializer);
     return await innerHandler.Handle(socketRequest);
 };
 
