@@ -13,7 +13,7 @@ var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensit
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
 var innerHandler = new OnJoinHandler(dynamoDbClient, tableName);
-var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketUrl");
+var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
 var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketUrl });
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
