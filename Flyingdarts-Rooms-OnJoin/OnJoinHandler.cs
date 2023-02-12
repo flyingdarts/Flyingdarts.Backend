@@ -1,17 +1,16 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Requests.Rooms.Create;
 using Flyingdarts.Requests.Rooms.Join;
 using Flyingdarts.Signalling.Shared;
 namespace Flyingdarts.Rooms.OnJoin;
 
-public class InnerHandler
+public class OnJoinHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
-    public InnerHandler() { }
-    public InnerHandler(IAmazonDynamoDB dynamoDb, string tableName)
+    public OnJoinHandler() { }
+    public OnJoinHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
         _dynamoDb = dynamoDb;
         _tableName = tableName;

@@ -13,7 +13,7 @@ var _dynamoDbClient = new AmazonDynamoDBClient();
 var _tableName = Environment.GetEnvironmentVariable("TableName")!;
 var _webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
 AmazonApiGatewayManagementApiClient _apiGatewayClient = new(new AmazonApiGatewayManagementApiConfig { ServiceURL = _webSocketApiUrl });
-var innerHandler = new InnerHandler(_dynamoDbClient, _tableName);
+var innerHandler = new OnJoinHandler(_dynamoDbClient, _tableName);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {

@@ -1,17 +1,17 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Requests.Rooms.Join;
-using Flyingdarts.Signalling.Shared;
 using System.Text.Json;
 using Flyingdarts.Requests.Games.X01.OnScore;
+using Flyingdarts.Signalling.Shared;
+
 namespace Flyingdarts.Games.X01.OnScore;
-public class InnerHandler
+public class OnScoreHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
-    public InnerHandler() {}
-    public InnerHandler(IAmazonDynamoDB dynamoDb, string tableName)
+    public OnScoreHandler() {}
+    public OnScoreHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
         _dynamoDb = dynamoDb;
         _tableName = tableName;
