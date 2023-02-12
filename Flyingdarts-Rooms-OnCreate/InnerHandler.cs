@@ -2,6 +2,7 @@
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Rooms.Create;
+using Flyingdarts.Signalling.Shared;
 
 public class InnerHandler
 {
@@ -14,7 +15,7 @@ public class InnerHandler
         _tableName = tableName;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(CreateRoomRequest request)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<CreateRoomRequest> request)
     {
         try
         {
@@ -27,7 +28,7 @@ public class InnerHandler
                         nameof(CreateRoomRequest.ConnectionId), new AttributeValue(request.ConnectionId)
                     },
                     {
-                        nameof(CreateRoomRequest.RoomId), new AttributeValue(request.RoomId)
+                        nameof(CreateRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
                     }
                 }
             };

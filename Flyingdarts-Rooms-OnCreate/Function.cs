@@ -13,7 +13,7 @@ var innerHandler = new InnerHandler(dynamoDbClient, tableName);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    var socketRequest = request.To<CreateRoomRequest>(serializer);
+    var socketRequest = request.To<IAmAMessage<CreateRoomRequest>>(serializer);
     return await innerHandler.Handle(socketRequest);
 };
 

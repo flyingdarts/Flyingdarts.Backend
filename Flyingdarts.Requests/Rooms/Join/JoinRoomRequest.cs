@@ -1,4 +1,5 @@
-﻿using Flyingdarts.Signalling.Shared;
+﻿using Flyingdarts.Requests.Rooms.Create;
+using Flyingdarts.Signalling.Shared;
 
 namespace Flyingdarts.Requests.Rooms.Join;
 public class JoinRoomRequest : IHaveAConnectionId

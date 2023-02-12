@@ -6,3 +6,9 @@ public interface IHaveAConnectionId
 
     public string ConnectionId { get; set; }
 }
+
+public interface IAmAMessage<TMessage> : IHaveAConnectionId
+{
+    public string Action { get; set; }
+    public TMessage Message { get; set; }
+}
