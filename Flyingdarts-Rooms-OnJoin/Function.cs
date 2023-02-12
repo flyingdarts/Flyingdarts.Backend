@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.Lambda.APIGatewayEvents;
@@ -12,11 +13,13 @@ var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensit
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
 var innerHandler = new OnJoinHandler(dynamoDbClient, tableName);
+var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketUrl");
+var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketUrl });
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<JoinRoomRequest>(serializer);
-    // await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, data, socketRequest.Message.RoomId);
+    await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(socketRequest.Message), socketRequest.Message.RoomId);
     return await innerHandler.Handle(socketRequest);
 };
 
