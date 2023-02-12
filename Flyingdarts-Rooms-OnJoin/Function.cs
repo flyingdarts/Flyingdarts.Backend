@@ -1,13 +1,10 @@
 using Amazon.ApiGatewayManagementApi;
-using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using Amazon.Runtime;
 using Flyingdarts.Signalling.Shared;
 using System.Net;
-using System.Text;
 using System.Text.Json;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.RuntimeSupport;
