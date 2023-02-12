@@ -2,8 +2,7 @@
 
 namespace Flyingdarts.Requests.Rooms.Create;
 // ReSharper disable once ClassNeverInstantiated.Global
-public class CreateRoomRequest : IHaveAConnectionId
+public class CreateRoomRequest
 {
     public string RoomId { get; set; }
-    public string ConnectionId { get; set; }
 }
