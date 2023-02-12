@@ -44,7 +44,11 @@ public class OnJoinHandler
         }
         catch (AmazonDynamoDBException e)
         {
-            return Responses.InternalServerError($"Failed to send message: {e.Message}");
+            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {request}");
+        }
+        catch (Exception e)
+        {
+            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {request}");
         }
     }
 }
