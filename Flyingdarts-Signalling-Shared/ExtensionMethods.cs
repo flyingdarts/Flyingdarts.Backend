@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+namespace Flyingdarts.Signalling.Shared;
 
 public static class ExtensionMethods
 {
