@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using Flyingdarts.Requests.Rooms.Create;
 
 public static class ExtensionMethods
 {
