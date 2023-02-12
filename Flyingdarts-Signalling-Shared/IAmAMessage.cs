@@ -10,7 +10,8 @@ public abstract class IAmAMessage<TMessage>
     [JsonIgnore]
     public string ConnectionId { get; set; } = null!;
 
-    protected IAmAMessage()
+    // ReSharper disable once PublicConstructorInAbstractClass
+    public IAmAMessage()
     {
 
     }
