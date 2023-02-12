@@ -52,11 +52,11 @@ public class OnJoinHandler
         }
         catch (AmazonDynamoDBException e)
         {
-            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{putItemRequest}");
+            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{JsonSerializer.Serialize(putItemRequest)}");
         }
         catch (Exception e)
         {
-            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{putItemRequest}");
+            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{JsonSerializer.Serialize(putItemRequest)}");
         }
 
     }
