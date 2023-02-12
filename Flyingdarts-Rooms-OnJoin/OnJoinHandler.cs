@@ -32,7 +32,7 @@ public class OnJoinHandler
                         nameof(JoinRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
                     },
                     {
-                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.PlayerId.ToString())
+                        nameof(JoinRoomRequest.PlayerId), new AttributeValue(request.Message.PlayerId)
                     },
                     {
                         nameof(JoinRoomRequest.PlayerName), new AttributeValue(request.Message.PlayerName)

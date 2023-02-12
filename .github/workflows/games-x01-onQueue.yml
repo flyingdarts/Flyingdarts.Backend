@@ -1,6 +1,6 @@
-name: "Deploy OnQueue"
+name: "Deploy Games X01 OnQueue"
 on:
-  merge_group:
+  push:
     branches: [ main ]
   workflow_dispatch:
 jobs:

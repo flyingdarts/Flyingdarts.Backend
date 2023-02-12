@@ -1,6 +1,6 @@
 name: "Deploy OnConnect"
 on:
-  merge_group:
+  push:
     branches: [ main ]
   workflow_dispatch:
 jobs:

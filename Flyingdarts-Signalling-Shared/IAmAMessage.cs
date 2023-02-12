@@ -4,7 +4,10 @@ namespace Flyingdarts.Signalling.Shared;
 
 public class IAmAMessage<TMessage>
 {
+    [JsonPropertyName("action")]
     public string Action { get; set; } = null!;
+
+    [JsonPropertyName("message")]
     public TMessage Message { get; set; } = default!;
 
     [JsonIgnore]

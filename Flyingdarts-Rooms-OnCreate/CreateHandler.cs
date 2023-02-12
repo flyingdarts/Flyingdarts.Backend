@@ -4,12 +4,12 @@ using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Rooms.Create;
 using Flyingdarts.Signalling.Shared;
 namespace Flyingdarts.Rooms.OnCreate;
-public class InnerHandler
+public class CreateHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
-    public InnerHandler() { }
-    public InnerHandler(IAmazonDynamoDB dynamoDb, string tableName)
+    public CreateHandler() { }
+    public CreateHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
         _dynamoDb = dynamoDb;
         _tableName = tableName;

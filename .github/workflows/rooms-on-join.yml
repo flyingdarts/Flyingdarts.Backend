@@ -1,6 +1,6 @@
 name: "Deploy Rooms OnJoin"
 on:
-  merge_group:
+  push:
     branches: [ main ]
   workflow_dispatch:
 jobs:

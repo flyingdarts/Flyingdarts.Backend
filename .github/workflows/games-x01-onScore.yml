@@ -1,6 +1,6 @@
-name: "Deploy OnScore"
+name: "Deploy Games X01 OnScore"
 on:
-  merge_group:
+  push:
     branches: [ main ]
   workflow_dispatch:
 jobs:
