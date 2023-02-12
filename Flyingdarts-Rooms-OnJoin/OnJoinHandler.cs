@@ -21,10 +21,11 @@ public class OnJoinHandler
 
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request, ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)
     {
+        PutItemRequest putItemRequest = null;
         try
         {
 
-            var putItemRequest = new PutItemRequest
+            putItemRequest = new PutItemRequest
             {
                 TableName = _tableName,
                 Item = new Dictionary<string, AttributeValue>
@@ -47,15 +48,16 @@ public class OnJoinHandler
 
             await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request.Message), request.Message.RoomId);
 
-            return Responses.Created("Room Created");
+            return Responses.Created("Room Joined");
         }
         catch (AmazonDynamoDBException e)
         {
-            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
+            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{putItemRequest}");
         }
         catch (Exception e)
         {
-            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
+            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}\nPutItemRequest{putItemRequest}");
         }
+
     }
 }
