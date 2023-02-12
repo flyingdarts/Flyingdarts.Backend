@@ -7,8 +7,14 @@ public interface IHaveAConnectionId
 
 public abstract class IAmAMessage<TMessage> : IHaveAConnectionId
 {
-    public string Action { get; set; }
-    public TMessage Message { get; set; }
+    public string Action { get; set; } = null!;
+    public TMessage Message { get; set; } = default!;
+
     [JsonIgnore]
-    public string ConnectionId { get; set; }
+    public string ConnectionId { get; set; } = null!;
+
+    protected IAmAMessage()
+    {
+
+    }
 }
