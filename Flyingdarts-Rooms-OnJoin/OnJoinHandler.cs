@@ -1,4 +1,5 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System.Text.Json;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Rooms.Join;
@@ -44,7 +45,7 @@ public class OnJoinHandler
         }
         catch (AmazonDynamoDBException e)
         {
-            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {request}");
+            return Responses.InternalServerError($"failed message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
         }
         catch (Exception e)
         {
