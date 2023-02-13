@@ -41,15 +41,15 @@ public class CreateHandler
             };
             await _dynamoDb.PutItemAsync(putItemRequest);
 
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
+            //using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
-            var postToConnectionRequest = new PostToConnectionRequest
-            {
-                ConnectionId = request.ConnectionId,
-                Data = stream
-            };
+            //var postToConnectionRequest = new PostToConnectionRequest
+            //{
+            //    ConnectionId = request.ConnectionId,
+            //    Data = stream
+            //};
 
-            await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
+            //await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
 
             return Responses.Created("Room Created");
         }
