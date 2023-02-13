@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
@@ -47,7 +48,7 @@ public class CreateHandler
 
             //await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
 
-            return Responses.Created(JsonSerializer.Serialize(new WebSocketMessageResponse<CreateRoomRequest>
+            return Responses.Created(JsonSerializer.Serialize(new IAmAMessage<CreateRoomRequest>
             {
                 Action = "rooms/created",
                 Message = request.Message
@@ -58,10 +59,4 @@ public class CreateHandler
             return Responses.InternalServerError($"Failed to send message: {e.Message}");
         }
     }
-}
-
-public class WebSocketMessageResponse<T>
-{
-    public string Action { get; set; }
-    public T Message { get; set; }
 }
