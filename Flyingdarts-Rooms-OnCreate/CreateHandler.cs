@@ -1,25 +1,21 @@
-﻿using Amazon.ApiGatewayManagementApi;
-using Amazon.ApiGatewayManagementApi.Model;
+﻿using System.Text.Json;
+using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Rooms.Create;
 using Flyingdarts.Signalling.Shared;
-using System.Text;
-using System.Text.Json;
 
 namespace Flyingdarts.Rooms.OnCreate;
 public class CreateHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
-    private readonly AmazonApiGatewayManagementApiClient _apiGatewayManagementApiClient;
     public CreateHandler() { }
-    public CreateHandler(IAmazonDynamoDB dynamoDb, string tableName, AmazonApiGatewayManagementApiClient apiGatewayManagementApiClient)
+    public CreateHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
         _dynamoDb = dynamoDb;
         _tableName = tableName;
-        _apiGatewayManagementApiClient = apiGatewayManagementApiClient;
     }
 
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<CreateRoomRequest> request)
@@ -51,11 +47,21 @@ public class CreateHandler
 
             //await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
 
-            return Responses.Created("Room Created");
+            return Responses.Created(JsonSerializer.Serialize(new WebSocketMessageResponse<CreateRoomRequest>
+            {
+                Action = "rooms/created",
+                Message = request.Message
+            }));
         }
         catch (AmazonDynamoDBException e)
         {
             return Responses.InternalServerError($"Failed to send message: {e.Message}");
         }
     }
+}
+
+public class WebSocketMessageResponse<T>
+{
+    public string Action { get; set; }
+    public T Message { get; set; }
 }
