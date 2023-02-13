@@ -11,9 +11,7 @@ using Flyingdarts.Signalling.Shared;
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
-var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketUrl });
-var innerHandler = new CreateHandler(dynamoDbClient, tableName, apiGatewayClient);
+var innerHandler = new CreateHandler(dynamoDbClient, tableName);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
