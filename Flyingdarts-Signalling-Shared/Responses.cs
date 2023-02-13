@@ -3,7 +3,7 @@ using Amazon.Lambda.APIGatewayEvents;
 namespace Flyingdarts.Signalling.Shared;
 public static class Responses
 {
-    private static APIGatewayProxyResponse Generate(string body, HttpStatusCode code = HttpStatusCode.Created) => new()
+    private static APIGatewayProxyResponse Generate(string body, HttpStatusCode code = HttpStatusCode.OK) => new()
     {
         StatusCode = (int)code,
         Body = body
