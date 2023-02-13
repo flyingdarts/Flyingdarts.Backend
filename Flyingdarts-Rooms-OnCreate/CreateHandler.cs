@@ -48,11 +48,7 @@ public class CreateHandler
 
             //await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
 
-            return Responses.Created(JsonSerializer.Serialize(new IAmAMessage<CreateRoomRequest>
-            {
-                Action = "rooms/created",
-                Message = request.Message
-            }));
+            return Responses.Created(JsonSerializer.Serialize(request));
         }
         catch (AmazonDynamoDBException e)
         {
