@@ -41,7 +41,7 @@ public class CreateHandler
             };
             await _dynamoDb.PutItemAsync(putItemRequest);
 
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request.Message)));
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
             var postToConnectionRequest = new PostToConnectionRequest
             {
