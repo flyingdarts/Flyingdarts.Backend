@@ -1,13 +1,9 @@
-name: "Build Rooms OnCreate"
+name: "Build Rooms OnCreate .NET 7"
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 jobs:
   Build:
-    strategy: 
-      matrix: 
-        dotnet-version: [6.0.x, 7.0.x]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -18,6 +14,6 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{matrix.dotnet-version}}
+          dotnet-version: 7.0.x
       - name: Build with dotnet
         run: dotnet build --configuration Release
