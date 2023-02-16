@@ -1,4 +1,4 @@
-name: "Build Rooms OnCreate .NET 6"
+name: "Build .NET 6"
 on:
   push:
     branches: [ main ]
