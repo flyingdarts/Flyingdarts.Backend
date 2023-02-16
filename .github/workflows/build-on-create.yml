@@ -1,0 +1,23 @@
+name: "Build Rooms OnCreate"
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  Build:
+    strategy: 
+      matrix: 
+        dotnet-version: [6.0.x, 7.0.x]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{matrix.dotnet-version}}
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
