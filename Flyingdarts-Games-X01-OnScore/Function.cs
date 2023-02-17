@@ -15,7 +15,7 @@ var innerHandler = new OnScoreHandler(dynamoDbClient, tableName);
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<X01OnScoreRequest>(serializer);
-    return await innerHandler.Handle(socketRequest);
+    return await innerHandler.Handle(socketRequest, dynamoDbClient, tableName);
 };
 // Build the Lambda runtime client passing in the handler to call for each
 // event and the JSON serializer to use for translating Lambda JSON documents
