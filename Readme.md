@@ -1,6 +1,6 @@
 # Flyingdarts WebSocketApi
 
-| Deploy | |
+| | Deploy |
 | --- | --- |
 | <strong>Default</strong> | |
 | Flyingdarts-Signalling-OnConnect | [![Deploy OnConnect](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-connect.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-connect.yml) |
