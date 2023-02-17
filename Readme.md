@@ -1,7 +1,7 @@
 # Flyingdarts WebSocketApi
 
 | | Deploy |
-| --- | --- |
+| --- | ---:|
 | <strong>Default</strong> | |
 | Flyingdarts-Signalling-OnConnect | [![Deploy OnConnect](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-connect.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-connect.yml) |
 | Flyingdarts-Signalling-OnDisconnect | [![Deploy OnDisconnect](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-disconnect.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/on-disconnect.yml) |
