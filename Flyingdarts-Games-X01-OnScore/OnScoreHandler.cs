@@ -39,8 +39,6 @@ public class OnScoreHandler
         var key = new Dictionary<string, AttributeValue>
         {
             ["ConnectionId"] = new AttributeValue { S = connectionId },
-            ["RoomId"] = new AttributeValue { S = request.RoomId },
-            ["PlayerId"] = new AttributeValue { S = request.PlayerId }
         };
         var updates = new Dictionary<string, AttributeValueUpdate>
         {
