@@ -35,7 +35,7 @@ public class OnJoinHandler
         }
         catch (Exception e)
         {
-            return Responses.InternalServerError($"Bad message: {e.Message} \n Request: {JsonSerializer.Serialize(request)}");
+            return Responses.InternalServerError($"Bad message: {e.Message} {e.InnerException} \n Request: {JsonSerializer.Serialize(request)}");
         }
 
     }
