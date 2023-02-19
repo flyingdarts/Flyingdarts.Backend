@@ -21,50 +21,53 @@ public static class MessageDispatcher
 
         var scanResponse = await dynamoDbClient.ScanAsync(scanRequest);
 
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-
-        var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId);
-
-        // Loop through all of the connections and broadcast the message out to the connections.
-        var count = 0;
-        foreach (var item in connectedClientsInRoom)
+        if (scanResponse.Items.Any())
         {
-            var postConnectionRequest = new PostToConnectionRequest
-            {
-                ConnectionId = item[Fields.ConnectionId].S,
-                Data = stream
-            };
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
 
-            try
+            var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId);
+
+            // Loop through all of the connections and broadcast the message out to the connections.
+            var count = 0;
+            foreach (var item in connectedClientsInRoom)
             {
-                context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
-                stream.Position = 0;
-                await apiGatewayClient.PostToConnectionAsync(postConnectionRequest);
-                count++;
-            }
-            catch (AmazonServiceException e)
-            {
-                // API Gateway returns a status of 410 GONE then the connection is no
-                // longer available. If this happens, delete the identifier
-                // from our DynamoDB table.
-                if (e.StatusCode == HttpStatusCode.Gone)
+                var postConnectionRequest = new PostToConnectionRequest
                 {
-                    var ddbDeleteRequest = new DeleteItemRequest
+                    ConnectionId = item[Fields.ConnectionId].S,
+                    Data = stream
+                };
+
+                try
+                {
+                    context.Logger.LogInformation($"Post to connection {count}: {postConnectionRequest.ConnectionId}");
+                    stream.Position = 0;
+                    await apiGatewayClient.PostToConnectionAsync(postConnectionRequest);
+                    count++;
+                }
+                catch (AmazonServiceException e)
+                {
+                    // API Gateway returns a status of 410 GONE then the connection is no
+                    // longer available. If this happens, delete the identifier
+                    // from our DynamoDB table.
+                    if (e.StatusCode == HttpStatusCode.Gone)
                     {
-                        TableName = tableName,
-                        Key = new Dictionary<string, AttributeValue>
+                        var ddbDeleteRequest = new DeleteItemRequest
+                        {
+                            TableName = tableName,
+                            Key = new Dictionary<string, AttributeValue>
                         {
                             { Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId }}
                         }
-                    };
+                        };
 
-                    context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
-                    await dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
-                }
-                else
-                {
-                    context.Logger.LogInformation($"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
-                    context.Logger.LogInformation(e.StackTrace);
+                        context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
+                        await dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
+                    }
+                    else
+                    {
+                        context.Logger.LogInformation($"Error posting message to {postConnectionRequest.ConnectionId}: {e.Message}");
+                        context.Logger.LogInformation(e.StackTrace);
+                    }
                 }
             }
         }
