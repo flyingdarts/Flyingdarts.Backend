@@ -4,6 +4,8 @@ using Amazon.Lambda.APIGatewayEvents;
 using System.Text.Json;
 using Flyingdarts.Requests.Games.X01.OnScore;
 using Flyingdarts.Signalling.Shared;
+using Amazon.Lambda.Core;
+using Amazon.ApiGatewayManagementApi;
 
 namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler
@@ -17,11 +19,13 @@ public class OnScoreHandler
         _tableName = tableName;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<X01OnScoreRequest> request, AmazonDynamoDBClient dynamoDbClient, string tableName)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<X01OnScoreRequest> request, AmazonDynamoDBClient dynamoDbClient, string tableName, ILambdaContext context, AmazonApiGatewayManagementApiClient apiGatewayClient, string data, string roomId)
     {
         try
         {
             await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
+
+            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
 
             return Responses.Created(JsonSerializer.Serialize(request));
         }
