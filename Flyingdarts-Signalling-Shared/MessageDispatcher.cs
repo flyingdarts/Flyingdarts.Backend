@@ -25,7 +25,7 @@ public static class MessageDispatcher
         {
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(data));
 
-            var connectedClientsInRoom = scanResponse.Items.Where(x => x[Fields.RoomId].S == roomId);
+            var connectedClientsInRoom = scanResponse.Items.Where(x => x["RoomId"].S == roomId);
 
             // Loop through all of the connections and broadcast the message out to the connections.
             var count = 0;
@@ -33,7 +33,7 @@ public static class MessageDispatcher
             {
                 var postConnectionRequest = new PostToConnectionRequest
                 {
-                    ConnectionId = item[Fields.ConnectionId].S,
+                    ConnectionId = item["ConnectionId"].S,
                     Data = stream
                 };
 
@@ -56,7 +56,7 @@ public static class MessageDispatcher
                             TableName = tableName,
                             Key = new Dictionary<string, AttributeValue>
                         {
-                            { Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId }}
+                            { "ConnectionId", new AttributeValue {S = postConnectionRequest.ConnectionId }}
                         }
                         };
 
