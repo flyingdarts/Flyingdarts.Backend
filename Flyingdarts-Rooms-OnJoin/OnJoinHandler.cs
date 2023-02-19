@@ -25,7 +25,7 @@ public class OnJoinHandler
         {
             await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
 
-            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request.Message), request.Message.RoomId);
+            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
 
             return Responses.Created(JsonSerializer.Serialize(request));
         }
