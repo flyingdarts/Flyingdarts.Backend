@@ -16,7 +16,7 @@ public static class MessageDispatcher
         var scanRequest = new ScanRequest
         {
             TableName = tableName,
-            ProjectionExpression = $"{Fields.ConnectionId},{Fields.RoomId}"
+            ProjectionExpression = $"ConnectionId,RoomId"
         };
 
         var scanResponse = await dynamoDbClient.ScanAsync(scanRequest);
