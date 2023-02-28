@@ -11,7 +11,7 @@ public class IAmAMessage<TMessage>
     public TMessage Message { get; set; } = default!;
 
     [JsonPropertyName("metadata")]
-    public Dictionary<string, string>? Metadata { get; set; } = null!;
+    public Dictionary<string, string> Metadata { get; set; } = null!;
 
     [JsonIgnore]
     public string ConnectionId { get; set; } = null!;
