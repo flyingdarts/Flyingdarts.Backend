@@ -10,10 +10,12 @@ namespace Flyingdarts.Rooms.OnJoin;
 
 public class OnJoinHandler
 {
+    private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
     public OnJoinHandler() { }
-    public OnJoinHandler(string tableName)
+    public OnJoinHandler(IAmazonDynamoDB dynamoDb, string tableName)
     {
+        _dynamoDb = dynamoDb;
         _tableName = tableName;
     }
 
@@ -21,19 +23,10 @@ public class OnJoinHandler
     {
         try
         {
-            await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message);
+            await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
 
-            var players = await GetRoomPlayers(dynamoDbClient, request.Message.RoomId);
-
-            request.Metadata = new Dictionary<string, string>
-            {
-                {
-                    "Opponent", JsonSerializer.Serialize(players)
-                }
-            };
-            
             await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
-    
+
             return Responses.Created(JsonSerializer.Serialize(request));
         }
         catch (AmazonDynamoDBException e)
@@ -46,13 +39,12 @@ public class OnJoinHandler
         }
 
     }
-    public async Task<List<string>> GetRoomPlayers(AmazonDynamoDBClient client,
-        string roomId)
-    {
-        var returnValue = new List<string> { "Nog ni direct, ti mo ki testen xxx" };
+    public static async Task<List<string>> GetRoomPlayers(AmazonDynamoDBClient client,
+        string roomId,
+        string tableName) {
         
         // Define query condition to search for range-keys that begin with the string "The Adventures"
-        var condition = new Condition
+        Condition condition = new Condition
         {
             ComparisonOperator = "BEGINS_WITH",
             AttributeValueList = new List<AttributeValue>
@@ -62,7 +54,7 @@ public class OnJoinHandler
         };
 
         // Create the key conditions from hashKey and condition
-        var keyConditions = new Dictionary<string, Condition>
+        Dictionary<string, Condition> keyConditions = new Dictionary<string, Condition>
         {
             // Range key condition
             {
@@ -77,9 +69,9 @@ public class OnJoinHandler
             do
             {
                 // Create Query request
-                var request = new QueryRequest
+                QueryRequest request = new QueryRequest
                 {
-                    TableName = _tableName,
+                    TableName = tableName,
                     ExclusiveStartKey = startKey,
                     KeyConditions = keyConditions
                 };
@@ -88,8 +80,8 @@ public class OnJoinHandler
                 var result = await client.QueryAsync(request);
 
                 // View all returned items
-                var items = result.Items;
-                foreach (var item in items)
+                List<Dictionary<string, AttributeValue>> items = result.Items;
+                foreach (Dictionary<string, AttributeValue> item in items)
                 {
                     Console.WriteLine("Item:");
                     foreach (var keyValuePair in item)
@@ -107,13 +99,13 @@ public class OnJoinHandler
                 startKey = result.LastEvaluatedKey;
             } while (startKey != null && startKey.Count > 0);
 
-            return returnValue;
-
+            return null;
     }
-    public async Task<bool> UpdateItemAsync(
+    public static async Task<bool> UpdateItemAsync(
         AmazonDynamoDBClient client,
         string connectionId,
-        JoinRoomRequest request)
+        JoinRoomRequest request,
+        string tableName)
     {
         var key = new Dictionary<string, AttributeValue>
         {
@@ -144,7 +136,7 @@ public class OnJoinHandler
         {
             AttributeUpdates = updates,
             Key = key,
-            TableName = _tableName,
+            TableName = tableName,
         };
 
         var response = await client.UpdateItemAsync(updateItemRequest);
