@@ -10,8 +10,13 @@ public class IAmAMessage<TMessage>
     [JsonPropertyName("message")]
     public TMessage Message { get; set; } = default!;
 
+    [JsonPropertyName("metadata")]
+    public Dictionary<string, string>? Metadata { get; set; } = null!;
+
     [JsonIgnore]
     public string ConnectionId { get; set; } = null!;
+
+
 
     // ReSharper disable once PublicConstructorInAbstractClass
     public IAmAMessage()
