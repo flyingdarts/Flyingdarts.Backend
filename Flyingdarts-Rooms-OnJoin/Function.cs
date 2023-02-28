@@ -12,7 +12,7 @@ using Flyingdarts.Rooms.OnJoin;
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
-var innerHandler = new OnJoinHandler(dynamoDbClient, tableName);
+var innerHandler = new OnJoinHandler(tableName);
 var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
 var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketUrl });
 // ReSharper disable once ConvertToLocalFunction
