@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Rooms-OnLeave", "Flyingdarts-Rooms-OnLeave\Flyingdarts-Rooms-OnLeave.csproj", "{107CDCF3-5609-45D8-9C87-3E0FF1381137}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Persistance", "Flyingdarts.Persistance\Flyingdarts.Persistance.csproj", "{B2D7C29C-DAD1-487D-BEE2-6890F235D584}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,18 @@ Global
 		{107CDCF3-5609-45D8-9C87-3E0FF1381137}.Release|x64.Build.0 = Release|Any CPU
 		{107CDCF3-5609-45D8-9C87-3E0FF1381137}.Release|x86.ActiveCfg = Release|Any CPU
 		{107CDCF3-5609-45D8-9C87-3E0FF1381137}.Release|x86.Build.0 = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|x64.Build.0 = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Debug|x86.Build.0 = Debug|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|x64.ActiveCfg = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|x64.Build.0 = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

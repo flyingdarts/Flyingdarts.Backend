@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Flyingdarts.Repositories</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.52" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Flyingdarts-Signalling-Shared\Flyingdarts-Signalling-Shared.csproj" />
+    </ItemGroup>
+
+</Project>
