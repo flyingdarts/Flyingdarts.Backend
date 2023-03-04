@@ -4,21 +4,23 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Flyingdarts.Requests.Signalling;
 using Flyingdarts.Signalling.Shared;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
+var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 // The function handler that will be called for each Lambda event
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    var connectionId = request.RequestContext.ConnectionId;
-
+    var socketRequest = request.To<PlayerConnectedRequest>(serializer);
     var ddbRequest = new PutItemRequest
     {
         TableName = TableName,
         Item = new Dictionary<string, AttributeValue>
         {
-            { Fields.ConnectionId, new AttributeValue{ S = connectionId}}
+            { "ConnectionId", new AttributeValue{ S = socketRequest.ConnectionId }},
+            { "PlayerId", new AttributeValue{ S = socketRequest.Message.PlayerId }}
         }
     };
 
