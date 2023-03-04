@@ -47,7 +47,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var scanRequest = new ScanRequest
         {
             TableName = TableName,
-            ProjectionExpression = Fields.ConnectionId
+            ProjectionExpression = "ConnectionId"
         };
 
         var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
@@ -61,7 +61,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         {
             var postConnectionRequest = new PostToConnectionRequest
             {
-                ConnectionId = item[Fields.ConnectionId].S,
+                ConnectionId = item["ConnectionId"].S,
                 Data = stream
             };
 
@@ -84,7 +84,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                         TableName = TableName,
                         Key = new Dictionary<string, AttributeValue>
                             {
-                                {Fields.ConnectionId, new AttributeValue {S = postConnectionRequest.ConnectionId}}
+                                {"ConnectionId", new AttributeValue {S = postConnectionRequest.ConnectionId}}
                             }
                     };
 

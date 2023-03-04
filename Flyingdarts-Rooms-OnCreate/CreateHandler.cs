@@ -38,7 +38,7 @@ public class CreateHandler
                         nameof(request.ConnectionId), new AttributeValue(request.ConnectionId)
                     },
                     {
-                        nameof(CreateRoomRequest.RoomId), new AttributeValue(request.Message.RoomId)
+                        nameof(request.Message.PlayerId), new AttributeValue(request.Message.PlayerId.ToString().ToLower())
                     }
                 }
             };

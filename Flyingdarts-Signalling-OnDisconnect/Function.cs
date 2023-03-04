@@ -19,7 +19,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         TableName = TableName,
         Key = new Dictionary<string, AttributeValue>
         {
-            { Fields.ConnectionId, new AttributeValue { S = connectionId } }
+            { "ConnectionId", new AttributeValue { S = connectionId } }
         }
     };
 
