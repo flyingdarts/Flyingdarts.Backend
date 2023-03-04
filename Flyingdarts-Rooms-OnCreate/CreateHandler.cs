@@ -67,9 +67,9 @@ public class CreateHandler
         var game = Game.Create(2, gameSettings, request.RoomId);
 
         var gamePlayer = GamePlayer.Create(game.GameId, request.PlayerId);
-        var gameWrite = _dbContext.CreateBatchWrite<Game>(new DynamoDBOperationConfig { OverrideTableName = "GamesTable" });
+        var gameWrite = _dbContext.CreateBatchWrite<Game>(new DynamoDBOperationConfig { OverrideTableName = "ApplicationTable" });
         gameWrite.AddPutItem(game);
-        var gamePlayersBatch = _dbContext.CreateBatchWrite<GamePlayer>(new DynamoDBOperationConfig { OverrideTableName = "GamesTable" }); 
+        var gamePlayersBatch = _dbContext.CreateBatchWrite<GamePlayer>(new DynamoDBOperationConfig { OverrideTableName = "ApplicationTable" }); 
         gamePlayersBatch.AddPutItems(new List<GamePlayer> { gamePlayer});
 
         await gameWrite.ExecuteAsync();
