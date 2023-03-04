@@ -44,18 +44,8 @@ public class CreateHandler
             };
             await _dynamoDb.PutItemAsync(putItemRequest);
             
-            WritePermanentRecord(request.Message);
+            await WritePermanentRecord(request.Message);
             
-            //using var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
-
-            //var postToConnectionRequest = new PostToConnectionRequest
-            //{
-            //    ConnectionId = request.ConnectionId,
-            //    Data = stream
-            //};
-
-            //await _apiGatewayManagementApiClient.PostToConnectionAsync(postToConnectionRequest);
-
             return Responses.Created(JsonSerializer.Serialize(request));
         }
         catch (AmazonDynamoDBException e)
@@ -64,7 +54,7 @@ public class CreateHandler
         }
     }
 
-    private void WritePermanentRecord(CreateRoomRequest request)
+    private async Task WritePermanentRecord(CreateRoomRequest request)
     {
         var gameSettings = new X01GameSettings
         {
@@ -81,5 +71,8 @@ public class CreateHandler
         gameWrite.AddPutItem(game);
         var gamePlayersBatch = _dbContext.CreateBatchWrite<GamePlayer>(new DynamoDBOperationConfig { OverrideTableName = "GamesTable" }); 
         gamePlayersBatch.AddPutItems(new List<GamePlayer> { gamePlayer});
+
+        await gameWrite.ExecuteAsync();
+        await gamePlayersBatch.ExecuteAsync();
     }
 }
