@@ -2,5 +2,5 @@ namespace Flyingdarts.Requests.Signalling;
 
 public class PlayerConnectedRequest
 {
-    public string PlayerId { get; set; }
+    public string? PlayerId { get; set; } = null;
 }
