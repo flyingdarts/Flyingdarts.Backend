@@ -1,0 +1,3 @@
+[submodule "dependencies/Flyingdarts.Core"]
+	path = dependencies/Flyingdarts.Core
+	url = git@github.com:flyingdarts/Flyingdarts.Core
