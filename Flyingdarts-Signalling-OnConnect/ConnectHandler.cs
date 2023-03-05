@@ -9,7 +9,6 @@ using Flyingdarts.Signalling.Shared;
 public class ConnectHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;
-    private IDynamoDBContext _dbContext;
     private readonly string _tableName;
     public ConnectHandler()
     {
@@ -18,7 +17,6 @@ public class ConnectHandler
     {
         _dynamoDb = dynamoDb;
         _tableName = tableName;
-        _dbContext = new DynamoDBContext(dynamoDb);
     }
 
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<PlayerConnectedRequest> request)
