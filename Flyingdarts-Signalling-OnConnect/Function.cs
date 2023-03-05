@@ -14,6 +14,7 @@ var innerHandler = new ConnectHandler(dynamoDbClient, tableName);
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<PlayerConnectedRequest>(serializer);
+    context.Logger.LogInformation(socketRequest.ToString());
     return await innerHandler.Handle(socketRequest);
 };
 
