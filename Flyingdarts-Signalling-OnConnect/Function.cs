@@ -15,16 +15,18 @@ var innerHandler = new ConnectHandler(dynamoDbClient, tableName);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    JsonDocument message = JsonDocument.Parse(request.Body);
-    
     var socketRequest = new IAmAMessage<PlayerConnectedRequest>
     {
         ConnectionId = request.RequestContext.ConnectionId
     };
-
-    if (message.RootElement.TryGetProperty("message", out var dataProperty) && !string.IsNullOrEmpty(dataProperty.GetString()))
+    
+    if (request.Body is not null)
     {
-        socketRequest.Message = JsonSerializer.Deserialize<PlayerConnectedRequest>(dataProperty);
+        JsonDocument message = JsonDocument.Parse(request.Body);
+        if (message.RootElement.TryGetProperty("message", out var dataProperty) && !string.IsNullOrEmpty(dataProperty.GetString()))
+        {
+            socketRequest.Message = JsonSerializer.Deserialize<PlayerConnectedRequest>(dataProperty);
+        }
     }
     
     context.Logger.LogInformation(socketRequest.ToString());
