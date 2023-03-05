@@ -23,8 +23,11 @@ public class ConnectHandler
     {
         try
         {
-            await CreateSignallingRecord(request);
-            await UpdateSignallingRecord(request);
+            if (request != null)
+                await CreateSignallingRecord(request.ConnectionId);
+
+            if (request?.Message != null && !string.IsNullOrEmpty(request.Message.PlayerId))
+                await UpdateSignallingRecord(request.ConnectionId, request.Message.PlayerId);
             
             return Responses.Created(JsonSerializer.Serialize(request));
         }
@@ -34,28 +37,28 @@ public class ConnectHandler
         }
     }
 
-    private async Task CreateSignallingRecord(IAmAMessage<PlayerConnectedRequest> request)
+    private async Task CreateSignallingRecord(string connectionId)
     {
         var ddbRequest = new PutItemRequest
         {
             TableName = _tableName,
             Item = new Dictionary<string, AttributeValue>
             {
-                { "ConnectionId", new AttributeValue{ S = request.ConnectionId }}
+                { "ConnectionId", new AttributeValue{ S = connectionId }}
             }
         };
 
         await _dynamoDb.PutItemAsync(ddbRequest);
     }
-    private async Task UpdateSignallingRecord(IAmAMessage<PlayerConnectedRequest> request)
+    private async Task UpdateSignallingRecord(string connectionId, string playerId)
     {
         var ddbRequest = new PutItemRequest
         {
             TableName = _tableName,
             Item = new Dictionary<string, AttributeValue>
             {
-                { "ConnectionId", new AttributeValue{ S = request.ConnectionId }},
-                { "PlayerId", new AttributeValue{ S = request.Message.PlayerId }}
+                { "ConnectionId", new AttributeValue{ S = connectionId }},
+                { "PlayerId", new AttributeValue{ S = playerId }}
             }
         };
 
