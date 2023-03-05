@@ -20,3 +20,4 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 await LambdaBootstrapBuilder.Create(handler, serializer)
     .Build()
     .RunAsync();
+    
