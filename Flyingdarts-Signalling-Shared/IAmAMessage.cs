@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 namespace Flyingdarts.Signalling.Shared;
 
 
@@ -16,11 +17,14 @@ public class IAmAMessage<TMessage>
     [JsonIgnore]
     public string ConnectionId { get; set; } = null!;
 
-
-
     // ReSharper disable once PublicConstructorInAbstractClass
     public IAmAMessage()
     {
 
+    }
+
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this);
     }
 }

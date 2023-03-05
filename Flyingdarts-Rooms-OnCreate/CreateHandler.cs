@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;

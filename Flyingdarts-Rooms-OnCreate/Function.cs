@@ -1,4 +1,3 @@
-using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;

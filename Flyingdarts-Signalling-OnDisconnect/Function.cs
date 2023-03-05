@@ -4,7 +4,6 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Signalling.Shared;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;

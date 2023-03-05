@@ -1,5 +1,4 @@
 using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Persistance;
 using Flyingdarts.Signalling.Shared;
 
 namespace Flyingdarts.Persistance;

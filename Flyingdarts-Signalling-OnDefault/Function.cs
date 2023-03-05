@@ -10,7 +10,6 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Runtime;
-using Flyingdarts.Signalling.Shared;
 
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
