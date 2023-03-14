@@ -3,7 +3,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 namespace Flyingdarts.Signalling.Shared;
 
-public static class ExtensionMethods
+public static class APIGatewayProxyRequestExtensions
 {
     public static IAmAMessage<T> To<T>(this APIGatewayProxyRequest request, ILambdaSerializer serializer) where T : class
     {

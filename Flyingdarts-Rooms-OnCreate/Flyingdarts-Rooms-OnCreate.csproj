@@ -21,7 +21,7 @@
         <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.84" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Flyingdarts-Signalling-Shared\Flyingdarts-Signalling-Shared.csproj" />
+        <ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
         <ProjectReference Include="..\Flyingdarts.Persistance\Flyingdarts.Persistance.csproj" />
         <ProjectReference Include="..\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
     </ItemGroup>

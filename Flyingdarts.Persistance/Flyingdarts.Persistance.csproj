@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Flyingdarts-Signalling-Shared\Flyingdarts-Signalling-Shared.csproj" />
+      <ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
     </ItemGroup>
 
 </Project>
