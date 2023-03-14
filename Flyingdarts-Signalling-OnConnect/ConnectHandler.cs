@@ -4,7 +4,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Requests.Signalling;
-using Flyingdarts.Signalling.Shared;
+using Flyingdarts.Shared;
 
 public class ConnectHandler
 {

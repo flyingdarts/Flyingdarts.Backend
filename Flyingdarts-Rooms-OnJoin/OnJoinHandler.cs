@@ -5,7 +5,8 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Flyingdarts.Requests.Rooms.Join;
-using Flyingdarts.Signalling.Shared;
+using Flyingdarts.Shared;
+
 namespace Flyingdarts.Rooms.OnJoin;
 
 public class OnJoinHandler

@@ -3,9 +3,9 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using System.Text.Json;
 using Flyingdarts.Requests.Games.X01.OnScore;
-using Flyingdarts.Signalling.Shared;
 using Amazon.Lambda.Core;
 using Amazon.ApiGatewayManagementApi;
+using Flyingdarts.Shared;
 
 namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler

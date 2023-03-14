@@ -5,7 +5,7 @@ using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Persistance;
 using Flyingdarts.Requests.Rooms.Create;
-using Flyingdarts.Signalling.Shared;
+using Flyingdarts.Shared;
 
 namespace Flyingdarts.Rooms.OnCreate;
 public class CreateHandler

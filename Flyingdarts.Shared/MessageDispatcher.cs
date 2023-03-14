@@ -1,13 +1,13 @@
-﻿using Amazon.DynamoDBv2.Model;
-using Amazon.Runtime;
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
 using Amazon.Lambda.Core;
+using Amazon.Runtime;
 
-namespace Flyingdarts.Signalling.Shared;
+namespace Flyingdarts.Shared;
 public static class MessageDispatcher
 {
     public static async Task DispatchMessage(ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)

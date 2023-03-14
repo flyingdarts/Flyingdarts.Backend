@@ -1,4 +1,4 @@
-namespace Flyingdarts.Signalling.Shared;
+namespace Flyingdarts.Shared;
 
 public static class Constants
 {
