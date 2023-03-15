@@ -1,11 +1,9 @@
 global using Amazon.DynamoDBv2;
-global using Amazon.DynamoDBv2.DataModel;
 global using Amazon.DynamoDBv2.Model;
 global using Amazon.Lambda.APIGatewayEvents;
 global using Amazon.Lambda.Core;
 global using Amazon.Lambda.RuntimeSupport;
 global using Amazon.Lambda.Serialization.SystemTextJson;
-global using Flyingdarts.Persistance;
 global using Flyingdarts.Requests.Rooms.Create;
 global using Flyingdarts.Rooms.OnCreate;
 global using Flyingdarts.Shared;

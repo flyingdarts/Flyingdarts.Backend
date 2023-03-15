@@ -1,9 +1,5 @@
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-
 var DynamoDbClient = new AmazonDynamoDBClient();
 var TableName = Environment.GetEnvironmentVariable("TableName")!;
-
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var connectionId = request.RequestContext.ConnectionId;
