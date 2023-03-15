@@ -6,5 +6,5 @@ public record CreateX01GameCommand(
     int PlayerCount, int Sets, int Leg,
     bool DoubleIn, bool DoubleOut,
     int StartingScore, List<Guid> PlayerIds,
-    string roomId
+    string RoomId
 ) : IRequest<CreateX01GameResult>;

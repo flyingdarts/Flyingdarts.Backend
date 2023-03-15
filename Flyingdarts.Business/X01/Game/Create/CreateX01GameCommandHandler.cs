@@ -3,7 +3,7 @@ public record CreateX01GameCommandHandler(IDynamoDBContext DbContext, IOptions<A
 {
     public async Task<CreateX01GameResult> Handle(CreateX01GameCommand request, CancellationToken cancellationToken)
     {
-        var game = Game.Create(request.PlayerCount, new X01GameSettings(request.Sets, request.Leg, request.DoubleIn, request.DoubleOut, request.StartingScore), request.roomId);
+        var game = Game.Create(request.PlayerCount, new X01GameSettings(request.Sets, request.Leg, request.DoubleIn, request.DoubleOut, request.StartingScore), request.RoomId);
         var players = request.PlayerIds.Select(x => GamePlayer.Create(game.GameId, x));
         var playerDarts = players.Select(x => GameDart.CreateInitial(x.GameId, x.PlayerId, request.StartingScore));
 

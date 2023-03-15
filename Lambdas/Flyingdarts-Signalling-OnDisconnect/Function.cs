@@ -1,5 +1,6 @@
-var DynamoDbClient = new AmazonDynamoDBClient();
-var TableName = Environment.GetEnvironmentVariable("TableName")!;
+var dynamoDbClient = new AmazonDynamoDBClient();
+var tableName = Environment.GetEnvironmentVariable("TableName")!;
+// ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var connectionId = request.RequestContext.ConnectionId;
@@ -7,14 +8,14 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 
     var ddbRequest = new DeleteItemRequest
     {
-        TableName = TableName,
+        TableName = tableName,
         Key = new Dictionary<string, AttributeValue>
         {
             { "ConnectionId", new AttributeValue { S = connectionId } }
         }
     };
 
-    await DynamoDbClient.DeleteItemAsync(ddbRequest);
+    await dynamoDbClient.DeleteItemAsync(ddbRequest);
 
     return new APIGatewayProxyResponse
     {

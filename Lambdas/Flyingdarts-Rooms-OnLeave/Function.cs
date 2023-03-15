@@ -1,3 +1,4 @@
+// ReSharper disable once ConvertToLocalFunction
 var handler = (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var connectionId = request.RequestContext.ConnectionId;

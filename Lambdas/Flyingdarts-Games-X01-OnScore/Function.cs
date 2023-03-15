@@ -4,6 +4,7 @@ var tableName = Environment.GetEnvironmentVariable("TableName")!;
 var webSocketUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
 var apiGatewayClient = new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketUrl });
 var innerHandler = new OnScoreHandler(tableName, dynamoDbClient, apiGatewayClient);
+// ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<X01OnScoreRequest>(serializer);

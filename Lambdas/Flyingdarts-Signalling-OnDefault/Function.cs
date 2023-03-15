@@ -1,19 +1,20 @@
-var DynamoDbClient = new AmazonDynamoDBClient();
-var TableName = Environment.GetEnvironmentVariable("TableName")!;
-var WebSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
-var ApiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
+var dynamoDbClient = new AmazonDynamoDBClient();
+var tableName = Environment.GetEnvironmentVariable("TableName")!;
+var webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl")!;
+var apiGatewayManagementApiClientFactory = (Func<string, AmazonApiGatewayManagementApiClient>)((endpoint) =>
 {
     return new AmazonApiGatewayManagementApiClient(new AmazonApiGatewayManagementApiConfig
     {
         ServiceURL = endpoint
     });
 });
+// ReSharper disable once ConvertToLocalFunction    
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
         // The body will look something like this: {"message":"sendmessage", "data":"What are you doing?"}
-        JsonDocument message = JsonDocument.Parse(request.Body);
+        var message = JsonDocument.Parse(request.Body);
 
         // Grab the data from the JSON body which is the message to broadcasted.
         JsonElement dataProperty;
@@ -32,14 +33,14 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         // List all of the current connections. In a more advanced use case the table could be used to grab a group of connection ids for a chat group.
         var scanRequest = new ScanRequest
         {
-            TableName = TableName,
+            TableName = tableName,
             ProjectionExpression = "ConnectionId"
         };
 
-        var scanResponse = await DynamoDbClient.ScanAsync(scanRequest);
+        var scanResponse = await dynamoDbClient.ScanAsync(scanRequest);
 
         // Construct the IAmazonApiGatewayManagementApi which will be used to send the message to.
-        var apiClient = ApiGatewayManagementApiClientFactory(WebSocketApiUrl);
+        var apiClient = apiGatewayManagementApiClientFactory(webSocketApiUrl);
 
         // Loop through all of the connections and broadcast the message out to the connections.
         var count = 0;
@@ -67,7 +68,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                 {
                     var ddbDeleteRequest = new DeleteItemRequest
                     {
-                        TableName = TableName,
+                        TableName = tableName,
                         Key = new Dictionary<string, AttributeValue>
                             {
                                 {"ConnectionId", new AttributeValue {S = postConnectionRequest.ConnectionId}}
@@ -75,7 +76,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
                     };
 
                     context.Logger.LogInformation($"Deleting gone connection: {postConnectionRequest.ConnectionId}");
-                    await DynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
+                    await dynamoDbClient.DeleteItemAsync(ddbDeleteRequest);
                 }
                 else
                 {
@@ -103,9 +104,6 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
     }
 };
 
-// Build the Lambda runtime client passing in the handler to call for each
-// event and the JSON serializer to use for translating Lambda JSON documents
-// to .NET types.
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
         .Build()
         .RunAsync();
