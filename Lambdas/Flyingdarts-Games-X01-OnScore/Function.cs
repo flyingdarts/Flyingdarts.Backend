@@ -1,14 +1,3 @@
-using Amazon.DynamoDBv2;
-using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Games.X01.OnScore;
-using Flyingdarts.Requests.Games.X01.OnScore;
-using Amazon.ApiGatewayManagementApi;
-using System.Text.Json;
-using Flyingdarts.Shared;
-
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;

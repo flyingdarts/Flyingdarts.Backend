@@ -1,14 +1,3 @@
-using System.Text.Json;
-using Amazon.ApiGatewayManagementApi;
-using Amazon.DynamoDBv2;
-using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Requests.Rooms.Join;
-using Flyingdarts.Rooms.OnJoin;
-using Flyingdarts.Shared;
-
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;

@@ -1,7 +1,5 @@
 // ReSharper disable once CheckNamespace
 
-using MediatR;
-
 namespace Flyingdarts.Business.X01;
 
 public record CreateX01GameCommand(

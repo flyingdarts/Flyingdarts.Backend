@@ -1,11 +1,4 @@
-﻿using System.Net;
-using System.Text;
-using Amazon.ApiGatewayManagementApi;
-using Amazon.ApiGatewayManagementApi.Model;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.Core;
-using Amazon.Runtime;
+﻿
 
 namespace Flyingdarts.Shared;
 public static class MessageDispatcher

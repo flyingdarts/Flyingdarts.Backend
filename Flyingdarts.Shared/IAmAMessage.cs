@@ -1,9 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace Flyingdarts.Shared;
-
-
+﻿namespace Flyingdarts.Shared;
 public class IAmAMessage<TMessage>
 {
     [JsonPropertyName("action")]

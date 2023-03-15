@@ -1,9 +1,3 @@
-using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Persistance;
-using Flyingdarts.Shared;
-using MediatR;
-using Microsoft.Extensions.Options;
-
 namespace Flyingdarts.Business.X01;
 
 public record CreateX01GameDartCommandHandler(IDynamoDBContext DbContext, IOptions<ApplicationOptions> ApplicationOptions) : IRequestHandler<CreateX01GameDartCommand, CreateX01GameDartResult>

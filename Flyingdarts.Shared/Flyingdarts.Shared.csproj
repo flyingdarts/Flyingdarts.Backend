@@ -1,14 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<RootNamespace>Flyingdarts.Shared</RootNamespace>
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.84" />
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.55" />
-	</ItemGroup>
 </Project>

@@ -1,8 +1,4 @@
-﻿using System.Text;
-using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-
-namespace Flyingdarts.Shared;
+﻿namespace Flyingdarts.Shared;
 
 public static class APIGatewayProxyRequestExtensions
 {

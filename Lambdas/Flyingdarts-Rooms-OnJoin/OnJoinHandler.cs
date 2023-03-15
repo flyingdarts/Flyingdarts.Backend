@@ -1,13 +1,4 @@
-﻿using System.Text.Json;
-using Amazon.ApiGatewayManagementApi;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-using Flyingdarts.Requests.Rooms.Join;
-using Flyingdarts.Shared;
-
-namespace Flyingdarts.Rooms.OnJoin;
+﻿namespace Flyingdarts.Rooms.OnJoin;
 
 public class OnJoinHandler
 {

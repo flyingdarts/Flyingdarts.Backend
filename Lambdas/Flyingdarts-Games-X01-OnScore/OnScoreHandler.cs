@@ -1,13 +1,4 @@
-﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.APIGatewayEvents;
-using System.Text.Json;
-using Flyingdarts.Requests.Games.X01.OnScore;
-using Amazon.Lambda.Core;
-using Amazon.ApiGatewayManagementApi;
-using Flyingdarts.Shared;
-
-namespace Flyingdarts.Games.X01.OnScore;
+﻿namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;

@@ -1,11 +1,3 @@
-using System.Text.Json;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Requests.Signalling;
-using Flyingdarts.Shared;
-
 public class ConnectHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;

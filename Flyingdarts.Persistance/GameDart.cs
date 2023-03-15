@@ -1,6 +1,3 @@
-using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Shared;
-
 namespace Flyingdarts.Persistance;
 
 public class GameDart : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem

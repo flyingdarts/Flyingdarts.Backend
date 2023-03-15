@@ -1,13 +1,4 @@
-﻿using System.Text.Json;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Persistance;
-using Flyingdarts.Requests.Rooms.Create;
-using Flyingdarts.Shared;
-
-namespace Flyingdarts.Rooms.OnCreate;
+﻿namespace Flyingdarts.Rooms.OnCreate;
 public class CreateHandler
 {
     private readonly IAmazonDynamoDB _dynamoDb;

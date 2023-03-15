@@ -1,7 +1,4 @@
-﻿using System.Net;
-using Amazon.Lambda.APIGatewayEvents;
-
-namespace Flyingdarts.Shared;
+﻿namespace Flyingdarts.Shared;
 public static class Responses
 {
     private static APIGatewayProxyResponse Generate(string body, HttpStatusCode code = HttpStatusCode.OK) => new()

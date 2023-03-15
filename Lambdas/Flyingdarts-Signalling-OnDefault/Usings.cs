@@ -1,0 +1,15 @@
+global using System;
+global using System.Collections.Generic;
+global using System.Text.Json;
+global using System.IO;
+global using System.Text;
+global using Amazon.Lambda.APIGatewayEvents;
+global using Amazon.Lambda.Core;
+global using System.Net;
+global using Amazon.ApiGatewayManagementApi;
+global using Amazon.ApiGatewayManagementApi.Model;
+global using Amazon.DynamoDBv2;
+global using Amazon.DynamoDBv2.Model;
+global using Amazon.Runtime;
+global using Amazon.Lambda.RuntimeSupport;
+global using Amazon.Lambda.Serialization.SystemTextJson;

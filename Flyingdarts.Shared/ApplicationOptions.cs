@@ -1,5 +1,3 @@
-using Amazon.DynamoDBv2.DataModel;
-
 namespace Flyingdarts.Shared;
 public class ApplicationOptions
 {
