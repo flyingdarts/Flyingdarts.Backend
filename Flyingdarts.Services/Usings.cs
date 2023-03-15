@@ -1,10 +1,10 @@
 global using Amazon.DynamoDBv2.DataModel;
-global using System;
-global using Flyingdarts.Shared;
+global using Amazon.DynamoDBv2.DocumentModel;
 global using Flyingdarts.Persistance;
+global using Flyingdarts.Shared;
+global using Microsoft.Extensions.Options;
+global using System;
 global using System.Collections.Generic;
-global using System.Threading.Tasks;
 global using System.Linq;
 global using System.Threading;
-global using Amazon.DynamoDBv2.DocumentModel;
-global using Microsoft.Extensions.Options;
+global using System.Threading.Tasks;

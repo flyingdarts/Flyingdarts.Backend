@@ -1,6 +1,4 @@
-﻿using Amazon.ApiGatewayManagementApi;
-
-namespace Flyingdarts.Rooms.OnCreate;
+﻿namespace Flyingdarts.Rooms.OnCreate;
 public class CreateHandler
 {
     private readonly string _tableName;

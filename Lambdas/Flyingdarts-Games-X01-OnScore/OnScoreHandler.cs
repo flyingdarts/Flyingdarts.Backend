@@ -1,6 +1,4 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-
-namespace Flyingdarts.Games.X01.OnScore;
+﻿namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler
 {
     private readonly string _tableName;

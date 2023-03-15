@@ -1,6 +1,4 @@
-﻿
-
-namespace Flyingdarts.Shared;
+﻿namespace Flyingdarts.Shared;
 public static class MessageDispatcher
 {
     public static async Task DispatchMessage(ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)

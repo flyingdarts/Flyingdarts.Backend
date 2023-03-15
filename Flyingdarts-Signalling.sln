@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", "{8E0828DE-E05E-48C1-B85A-DECA59219304}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		Directory.Build.props = Directory.Build.props
 		.github\workflows\games-x01-onQueue.yml = .github\workflows\games-x01-onQueue.yml
 		.github\workflows\games-x01-onScore.yml = .github\workflows\games-x01-onScore.yml
 		.github\workflows\on-connect.yml = .github\workflows\on-connect.yml
@@ -33,6 +34,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Services", "Flyingdarts.Services\Flyingdarts.Services.csproj", "{C79E271B-2327-4639-8063-E1706265197B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambdas", "Lambdas", "{A0A98CD2-1F52-4658-ACAA-981F809BBBD9}"
+	ProjectSection(SolutionItems) = preProject
+		Lambdas\Directory.Build.props = Lambdas\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Signalling-OnDisconnect", "Lambdas\Flyingdarts-Signalling-OnDisconnect\Flyingdarts-Signalling-OnDisconnect.csproj", "{8C5260BD-1E9D-465E-843A-FBA0C375E6E5}"
 EndProject
