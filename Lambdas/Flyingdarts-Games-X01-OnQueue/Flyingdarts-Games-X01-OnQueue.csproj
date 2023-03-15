@@ -13,6 +13,6 @@
 		<PublishReadyToRun>true</PublishReadyToRun>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+		<ProjectReference Include="..\..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
 	</ItemGroup>
 </Project>

@@ -27,6 +27,6 @@ jobs:
           role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy function
-        working-directory: "Flyingdarts-Signalling-OnConnect"
+        working-directory: "Lambdas/Flyingdarts-Signalling-OnConnect"
         run: |
           dotnet lambda deploy-function --function-name Flyingdarts-Signalling-OnConnect -frun dotnet6 --region eu-west-1

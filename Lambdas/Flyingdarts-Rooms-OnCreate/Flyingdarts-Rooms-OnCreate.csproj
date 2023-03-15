@@ -6,15 +6,15 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <!-- This property makes the build directory similar to a publish directory and helps the
+	    <!-- This property makes the build directory similar to a publish directory and helps the
         AWS .NET Lambda Mock Test Tool find project dependencies. -->
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <!-- Generate ready to run images during publishing to improve cold start time. -->
         <PublishReadyToRun>true</PublishReadyToRun>
     </PropertyGroup>
-
     <ItemGroup>
-        <ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
-        <ProjectReference Include="..\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
+        <ProjectReference Include="..\..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+        <ProjectReference Include="..\..\Flyingdarts.Persistance\Flyingdarts.Persistance.csproj" />
+        <ProjectReference Include="..\..\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
     </ItemGroup>
 </Project>

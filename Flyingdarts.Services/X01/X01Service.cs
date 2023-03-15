@@ -21,23 +21,23 @@ public class X01Service : IGameService
     /// <summary>
     /// Storing data
     /// </summary>
-    public async void PutGame(Game game)
+    public async Task PutGame(Game gameRequest)
     {
-        if (game == null) throw new Exception("No game. hmm?!");
-        var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.Value.ToOperationConfig());
-        gameWrite.AddPutItem(game);
-        await gameWrite.ExecuteAsync();
+        var game = await _dbContext.LoadAsync<Game>(gameRequest.PrimaryKey);
+        if (game != null) throw new Exception($"Game with PK {gameRequest.PrimaryKey} Already Exists");
+        await _dbContext.SaveAsync(gameRequest);
     }
 
-    public async void PutGamePlayer(GamePlayer gamePlayer)
+    public async Task PutGamePlayer(GamePlayer gamePlayerRequest)
     {
+        var gamePlayer = await _dbContext.LoadAsync<GamePlayer>(gamePlayerRequest.PrimaryKey);
         if (gamePlayer == null) throw new Exception("No game player. hmm?!");
         var batchWrite = _dbContext.CreateBatchWrite<GamePlayer>(_applicationOptions.Value.ToOperationConfig());
         batchWrite.AddPutItem(gamePlayer);
         await batchWrite.ExecuteAsync(CancellationToken.None);    
     }
 
-    public async void PutGameDart(GameDart gameDart)
+    public async Task PutGameDart(GameDart gameDart)
     {
         if (gameDart == null) throw new Exception("No game dart. hmm?!");
         var batchWrite = _dbContext.CreateBatchWrite<GameDart>(_applicationOptions.Value.ToOperationConfig());
@@ -52,30 +52,21 @@ public class X01Service : IGameService
     /// <summary>
     /// Providing in access patterns
     /// </summary>
-    public Game GetGame(long gameId)
+    public async Task<Game> GetGame(long gameId)
     {
-        return _dbContext.FromQueryAsync<Game>(
+        var result = await _dbContext.FromQueryAsync<Game>(
                 GetGameQueryConfig(gameId),
                 _applicationOptions.Value.ToOperationConfig())
-            .GetRemainingAsync(CancellationToken.None).Result.Single();
+            .GetRemainingAsync(CancellationToken.None);
+        return result.Single();
     }
 
-    public List<GamePlayer> GetGamePlayers(string roomId)
+    public async Task<List<GamePlayer>> GetGamePlayers(long gameId)
     {
         throw new NotImplementedException();
     }
 
-    public List<GamePlayer> GetGamePlayers(long gameId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<GameDart> GetGamePlayerGameDarts(string roomId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public List<GameDart> GetGamePlayerGameDarts(long gameId)
+    public async Task<List<GameDart>> GetGamePlayerGameDarts(long gameId)
     {
         throw new NotImplementedException();
     }
@@ -93,22 +84,12 @@ public class X01Service : IGameService
         queryFilter.AddCondition("SK", QueryOperator.BeginsWith, $"{gameId}#");
         return new QueryOperationConfig { Filter = queryFilter };
     }
-    
-    private QueryOperationConfig GetGamePlayersQueryConfig(string roomId)
-    {
-        throw new NotImplementedException();
-    }
-    
+
     private QueryOperationConfig GetGamePlayersQueryConfig(long gameId)
     {
         throw new NotImplementedException();
     }
-    
-    private QueryOperationConfig GetGamePlayerGameDartsQueryConfig(string roomId)
-    {
-        throw new NotImplementedException();
-    }
-    
+
     private QueryOperationConfig GetGamePlayerGameDartsQueryConfig(long gameId)
     {
         throw new NotImplementedException();
