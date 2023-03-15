@@ -1,22 +1,26 @@
-﻿namespace Flyingdarts.Games.X01.OnScore;
+﻿using Amazon.DynamoDBv2.DataModel;
+
+namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler
 {
-    private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
+    private readonly AmazonDynamoDBClient _dynamoDbClient;
+    private readonly AmazonApiGatewayManagementApiClient _apiGatewayClient;
     public OnScoreHandler() { }
-    public OnScoreHandler(IAmazonDynamoDB dynamoDb, string tableName)
+    public OnScoreHandler(string tableName, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient)
     {
-        _dynamoDb = dynamoDb;
         _tableName = tableName;
+        _dynamoDbClient = dynamoDbClient;
+        _apiGatewayClient = apiGatewayClient;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<X01OnScoreRequest> request, AmazonDynamoDBClient dynamoDbClient, string tableName, ILambdaContext context, AmazonApiGatewayManagementApiClient apiGatewayClient, string data, string roomId)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<X01OnScoreRequest> request, ILambdaContext context)
     {
         try
         {
-            await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
+            await UpdateItemAsync(_dynamoDbClient, request.ConnectionId, request.Message, _tableName);
 
-            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
+            await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
 
             return Responses.Created(JsonSerializer.Serialize(request));
         }

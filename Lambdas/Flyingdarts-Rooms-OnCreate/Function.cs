@@ -1,8 +1,7 @@
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;
-var innerHandler = new CreateHandler(dynamoDbClient, tableName);
-// ReSharper disable once ConvertToLocalFunction
+var innerHandler = new CreateHandler(tableName, dynamoDbClient);
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var socketRequest = request.To<CreateRoomRequest>(serializer);

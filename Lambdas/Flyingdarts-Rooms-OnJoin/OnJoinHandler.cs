@@ -2,22 +2,24 @@
 
 public class OnJoinHandler
 {
-    private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
+    private readonly AmazonDynamoDBClient _dynamoDbClient;
+    private readonly AmazonApiGatewayManagementApiClient _apiGatewayClient;
     public OnJoinHandler() { }
-    public OnJoinHandler(IAmazonDynamoDB dynamoDb, string tableName)
+    public OnJoinHandler(string tableName, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient)
     {
-        _dynamoDb = dynamoDb;
         _tableName = tableName;
+        _dynamoDbClient = dynamoDbClient;
+        _apiGatewayClient = apiGatewayClient;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request, ILambdaContext context, AmazonDynamoDBClient dynamoDbClient, AmazonApiGatewayManagementApiClient apiGatewayClient, string tableName, string data, string roomId)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<JoinRoomRequest> request, ILambdaContext context)
     {
         try
         {
-            await UpdateItemAsync(dynamoDbClient, request.ConnectionId, request.Message, tableName);
+            await UpdateItemAsync(_dynamoDbClient, request.ConnectionId, request.Message, _tableName);
 
-            await MessageDispatcher.DispatchMessage(context, dynamoDbClient, apiGatewayClient, tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
+            await MessageDispatcher.DispatchMessage(context, _dynamoDbClient, _apiGatewayClient, _tableName, JsonSerializer.Serialize(request), request.Message.RoomId);
 
             return Responses.Created(JsonSerializer.Serialize(request));
         }
@@ -31,68 +33,7 @@ public class OnJoinHandler
         }
 
     }
-    public static async Task<List<string>> GetRoomPlayers(AmazonDynamoDBClient client,
-        string roomId,
-        string tableName) {
-        
-        // Define query condition to search for range-keys that begin with the string "The Adventures"
-        Condition condition = new Condition
-        {
-            ComparisonOperator = "BEGINS_WITH",
-            AttributeValueList = new List<AttributeValue>
-            {
-                new AttributeValue { S = roomId }
-            }
-        };
-
-        // Create the key conditions from hashKey and condition
-        Dictionary<string, Condition> keyConditions = new Dictionary<string, Condition>
-        {
-            // Range key condition
-            {
-                "RoomId",
-                condition
-            }
-        };
-
-            // Define marker variable
-            Dictionary<string, AttributeValue> startKey = null;
-
-            do
-            {
-                // Create Query request
-                QueryRequest request = new QueryRequest
-                {
-                    TableName = tableName,
-                    ExclusiveStartKey = startKey,
-                    KeyConditions = keyConditions
-                };
-
-                // Issue request
-                var result = await client.QueryAsync(request);
-
-                // View all returned items
-                List<Dictionary<string, AttributeValue>> items = result.Items;
-                foreach (Dictionary<string, AttributeValue> item in items)
-                {
-                    Console.WriteLine("Item:");
-                    foreach (var keyValuePair in item)
-                    {
-                        Console.WriteLine("{0} : S={1}, N={2}, SS=[{3}], NS=[{4}]",
-                            keyValuePair.Key,
-                            keyValuePair.Value.S,
-                            keyValuePair.Value.N,
-                            string.Join(", ", keyValuePair.Value.SS ?? new List<string>()),
-                            string.Join(", ", keyValuePair.Value.NS ?? new List<string>()));
-                    }
-                }
-
-                // Set marker variable
-                startKey = result.LastEvaluatedKey;
-            } while (startKey != null && startKey.Count > 0);
-
-            return null;
-    }
+    
     public static async Task<bool> UpdateItemAsync(
         AmazonDynamoDBClient client,
         string connectionId,

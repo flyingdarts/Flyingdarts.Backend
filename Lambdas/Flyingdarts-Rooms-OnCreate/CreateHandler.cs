@@ -1,19 +1,17 @@
-﻿namespace Flyingdarts.Rooms.OnCreate;
+﻿using Amazon.ApiGatewayManagementApi;
+
+namespace Flyingdarts.Rooms.OnCreate;
 public class CreateHandler
 {
-    private readonly IAmazonDynamoDB _dynamoDb;
-    private IDynamoDBContext _dbContext;
     private readonly string _tableName;
-    public CreateHandler()
+    private readonly AmazonDynamoDBClient _dynamoDbClient;
+    private readonly AmazonApiGatewayManagementApiClient _apiGatewayClient;
+    public CreateHandler() { }
+    public CreateHandler(string tableName, AmazonDynamoDBClient dynamoDbClient)
     {
-    }
-    public CreateHandler(IAmazonDynamoDB dynamoDb, string tableName)
-    {
-        _dynamoDb = dynamoDb;
         _tableName = tableName;
-        _dbContext = new DynamoDBContext(dynamoDb);
+        _dynamoDbClient = dynamoDbClient;
     }
-
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<CreateRoomRequest> request)
     {
         try
@@ -31,7 +29,7 @@ public class CreateHandler
                     }
                 }
             };
-            await _dynamoDb.PutItemAsync(putItemRequest);
+            await _dynamoDbClient.PutItemAsync(putItemRequest);
             
             await WritePermanentRecord(request.Message);
             
@@ -45,23 +43,6 @@ public class CreateHandler
 
     private async Task WritePermanentRecord(CreateRoomRequest request)
     {
-        var gameSettings = new X01GameSettings
-        {
-            DoubleOut = false,
-            DoubleIn = false,
-            Legs = 1,
-            Sets = 1,
-            StartingScore = 501
-        };            
-        var game = Game.Create(2, gameSettings, request.RoomId);
-
-        var gamePlayer = GamePlayer.Create(game.GameId, request.PlayerId);
-        var gameWrite = _dbContext.CreateBatchWrite<Game>(new DynamoDBOperationConfig { OverrideTableName = "ApplicationTable" });
-        gameWrite.AddPutItem(game);
-        var gamePlayersBatch = _dbContext.CreateBatchWrite<GamePlayer>(new DynamoDBOperationConfig { OverrideTableName = "ApplicationTable" }); 
-        gamePlayersBatch.AddPutItems(new List<GamePlayer> { gamePlayer});
-
-        await gameWrite.ExecuteAsync();
-        await gamePlayersBatch.ExecuteAsync();
+        throw new NotImplementedException();
     }
 }
