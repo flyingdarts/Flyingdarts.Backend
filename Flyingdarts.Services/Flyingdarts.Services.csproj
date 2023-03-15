@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.101.55" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.2.23128.3" />
     </ItemGroup>
 
     <ItemGroup>
