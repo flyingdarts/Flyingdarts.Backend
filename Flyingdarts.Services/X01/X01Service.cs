@@ -54,6 +54,15 @@ public class X01Service : IGameService
             .GetRemainingAsync(CancellationToken.None);
         return result.Single();
     }
+    
+    public async Task<List<Game>> GetLatestGames()
+    {
+        var result = await _dbContext.FromQueryAsync<Game>(
+                GetLatestGamesQueryConfig(),
+                _applicationOptions.Value.ToOperationConfig())
+            .GetRemainingAsync(CancellationToken.None);
+        return result.Take(10).ToList();
+    }
 
     public async Task<List<GamePlayer>> GetGamePlayers(long gameId)
     {
@@ -79,6 +88,11 @@ public class X01Service : IGameService
         return new QueryOperationConfig { Filter = queryFilter };
     }
 
+    private QueryOperationConfig GetLatestGamesQueryConfig()
+    {
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
+        return new QueryOperationConfig { Filter = queryFilter };
+    }
     private QueryOperationConfig GetGamePlayersQueryConfig(long gameId)
     {
         throw new NotImplementedException();
