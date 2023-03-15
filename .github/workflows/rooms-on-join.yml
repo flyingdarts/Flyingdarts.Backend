@@ -29,4 +29,4 @@ jobs:
       - name: Deploy function
         working-directory: "Lambdas/Flyingdarts-Rooms-OnJoin"
         run: |
-          dotnet lambda deploy-function --function-name Flyingdarts-Rooms-OnJoin -frun dotnet6 --region eu-west-1
+          dotnet lambda deploy-function --function-name Flyingdarts-Rooms-OnJoin -frun dotnet6 -f net6.0 --region eu-west-1
