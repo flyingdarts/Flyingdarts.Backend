@@ -15,19 +15,12 @@ public class X01Service : IGameService
         _dbContext = dbContext;
         _applicationOptions = applicationOptions;
     }
-    private QueryOperationConfig GetGameQueryConfig(long gameId)
-    {
-        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
-        queryFilter.AddCondition("SK", QueryOperator.BeginsWith, $"{gameId}#");
-        return new QueryOperationConfig { Filter = queryFilter };
-    }
-    public Game GetGame(long gameId)
-    {
-        return _dbContext.FromQueryAsync<Game>(
-                GetGameQueryConfig(gameId),
-                _applicationOptions.Value.ToOperationConfig())
-            .GetRemainingAsync(CancellationToken.None).Result.Single();
-    }
+    
+    #region Puts
+    
+    /// <summary>
+    /// Storing data
+    /// </summary>
     public async void PutGame(Game game)
     {
         if (game == null) throw new Exception("No game. hmm?!");
@@ -51,4 +44,75 @@ public class X01Service : IGameService
         batchWrite.AddPutItem(gameDart);
         await batchWrite.ExecuteAsync(CancellationToken.None);
     }
+
+    #endregion
+    
+    #region Queries
+    
+    /// <summary>
+    /// Providing in access patterns
+    /// </summary>
+    public Game GetGame(long gameId)
+    {
+        return _dbContext.FromQueryAsync<Game>(
+                GetGameQueryConfig(gameId),
+                _applicationOptions.Value.ToOperationConfig())
+            .GetRemainingAsync(CancellationToken.None).Result.Single();
+    }
+
+    public List<GamePlayer> GetGamePlayers(string roomId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<GamePlayer> GetGamePlayers(long gameId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<GameDart> GetGamePlayerGameDarts(string roomId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<GameDart> GetGamePlayerGameDarts(long gameId)
+    {
+        throw new NotImplementedException();
+    }
+    
+    #endregion
+    
+    #region Query configuration
+
+    /// <summary>
+    /// Query configurations that express access patterns
+    /// </summary>
+    private QueryOperationConfig GetGameQueryConfig(long gameId)
+    {
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
+        queryFilter.AddCondition("SK", QueryOperator.BeginsWith, $"{gameId}#");
+        return new QueryOperationConfig { Filter = queryFilter };
+    }
+    
+    private QueryOperationConfig GetGamePlayersQueryConfig(string roomId)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private QueryOperationConfig GetGamePlayersQueryConfig(long gameId)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private QueryOperationConfig GetGamePlayerGameDartsQueryConfig(string roomId)
+    {
+        throw new NotImplementedException();
+    }
+    
+    private QueryOperationConfig GetGamePlayerGameDartsQueryConfig(long gameId)
+    {
+        throw new NotImplementedException();
+    }
+
+    #endregion
 }
