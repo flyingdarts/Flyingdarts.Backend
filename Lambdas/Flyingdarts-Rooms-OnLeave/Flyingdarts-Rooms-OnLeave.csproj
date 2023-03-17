@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<ItemGroup>
-		<ProjectReference Include="..\..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+		<ProjectReference Include="..\..\Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
 	</ItemGroup>
 </Project>

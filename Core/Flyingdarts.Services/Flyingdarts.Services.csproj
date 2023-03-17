@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <RootNamespace>Flyingdarts.Services</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Flyingdarts.Persistance\Flyingdarts.Persistance.csproj" />
+    </ItemGroup>
+</Project>

@@ -1,9 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Library</OutputType>
-	</PropertyGroup>
-	<ItemGroup>
-      <ProjectReference Include="..\Flyingdarts.Persistance\Flyingdarts.Persistance.csproj" />
-      <ProjectReference Include="..\Flyingdarts.Services\Flyingdarts.Services.csproj" />
-    </ItemGroup>
-</Project>

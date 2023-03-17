@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>Library</OutputType>
+        <RootNamespace>Flyingdarts.Persistance</RootNamespace>
 	</PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />

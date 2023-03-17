@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Shared", "Flyingdarts.Shared\Flyingdarts.Shared.csproj", "{3875DCD0-29B6-470B-9710-171B956942AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Shared", "Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj", "{3875DCD0-29B6-470B-9710-171B956942AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Requests", "Flyingdarts.Requests\Flyingdarts.Requests.csproj", "{9356FFB9-CA89-4423-9125-0F96EB2770ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Requests", "Core\Flyingdarts.Requests\Flyingdarts.Requests.csproj", "{9356FFB9-CA89-4423-9125-0F96EB2770ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{26A88FF1-E814-4AEB-A21B-DBBC6AA83952}"
 EndProject
@@ -27,11 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", 
 		.github\workflows\rooms-on-leave.yml = .github\workflows\rooms-on-leave.yml
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Persistance", "Flyingdarts.Persistance\Flyingdarts.Persistance.csproj", "{B2D7C29C-DAD1-487D-BEE2-6890F235D584}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Persistance", "Core\Flyingdarts.Persistance\Flyingdarts.Persistance.csproj", "{B2D7C29C-DAD1-487D-BEE2-6890F235D584}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Business", "Flyingdarts.Business\Flyingdarts.Business.csproj", "{A3200A9D-358C-4B7B-AA48-FFE8B982B6CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Business", "Core\Flyingdarts.Business\Flyingdarts.Business.csproj", "{A3200A9D-358C-4B7B-AA48-FFE8B982B6CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Services", "Flyingdarts.Services\Flyingdarts.Services.csproj", "{C79E271B-2327-4639-8063-E1706265197B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Services", "Core\Flyingdarts.Services\Flyingdarts.Services.csproj", "{C79E271B-2327-4639-8063-E1706265197B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lambdas", "Lambdas", "{A0A98CD2-1F52-4658-ACAA-981F809BBBD9}"
 	ProjectSection(SolutionItems) = preProject
@@ -53,6 +53,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Games-X01-OnScore", "Lambdas\Flyingdarts-Games-X01-OnScore\Flyingdarts-Games-X01-OnScore.csproj", "{ED82D805-E651-4B0F-981B-1E838C48CE5F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Games-X01-OnQueue", "Lambdas\Flyingdarts-Games-X01-OnQueue\Flyingdarts-Games-X01-OnQueue.csproj", "{B50333FD-0A32-4EC0-A34E-B0929237AFD7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C3923452-246B-485E-A156-D35609089F79}"
+	ProjectSection(SolutionItems) = preProject
+		Core\Directory.Build.props = Core\Directory.Build.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,8 +230,13 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{3875DCD0-29B6-470B-9710-171B956942AB} = {C3923452-246B-485E-A156-D35609089F79}
+		{9356FFB9-CA89-4423-9125-0F96EB2770ED} = {C3923452-246B-485E-A156-D35609089F79}
 		{26A88FF1-E814-4AEB-A21B-DBBC6AA83952} = {A35E3B56-A1CD-466A-9274-36901C003B96}
 		{8E0828DE-E05E-48C1-B85A-DECA59219304} = {26A88FF1-E814-4AEB-A21B-DBBC6AA83952}
+		{B2D7C29C-DAD1-487D-BEE2-6890F235D584} = {C3923452-246B-485E-A156-D35609089F79}
+		{A3200A9D-358C-4B7B-AA48-FFE8B982B6CD} = {C3923452-246B-485E-A156-D35609089F79}
+		{C79E271B-2327-4639-8063-E1706265197B} = {C3923452-246B-485E-A156-D35609089F79}
 		{8C5260BD-1E9D-465E-843A-FBA0C375E6E5} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
 		{0DB9261C-ADFD-4FE6-B38F-878C7AE81D05} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
 		{D1C907F2-A491-4F64-8966-981BBC21F046} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}

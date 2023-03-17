@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<OutputType>Library</OutputType>
+		<RootNamespace>Flyingdarts.Shared</RootNamespace>
 	</PropertyGroup>
 </Project>

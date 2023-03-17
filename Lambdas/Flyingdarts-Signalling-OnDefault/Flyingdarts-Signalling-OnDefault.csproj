@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>Flyingdarts.Signalling.OnConnect</RootNamespace>
+	</PropertyGroup>
+	
 	<ItemGroup>
-		<ProjectReference Include="..\..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+		<ProjectReference Include="..\..\Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
 	</ItemGroup>
 </Project>

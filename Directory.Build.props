@@ -1,16 +1,10 @@
 <Project>
 	<PropertyGroup>
 		<LangVersion>10</LangVersion>
-		<TargetFrameworks>net6.0;</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
-		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.90" />
-		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.102.4" />
-		<PackageReference Include="MediatR" Version="12.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
-		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
+		<ProjectReference Include="..\..\Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
 	</ItemGroup>
 </Project>
