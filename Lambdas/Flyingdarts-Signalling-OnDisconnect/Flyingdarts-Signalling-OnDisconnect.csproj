@@ -1,3 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    <PropertyGroup>
+        <RootNamespace>Flyingdarts.Signalling.OnDisconnect</RootNamespace>
+    </PropertyGroup>
 </Project>
