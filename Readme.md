@@ -11,6 +11,7 @@
 | Flyingdarts-Rooms-OnJoin | [![Deploy Rooms OnJoin](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/rooms-on-join.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/rooms-on-join.yml) |
 | Flyingdarts-Rooms-OnLeave | [![Deploy Rooms OnLeave](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/rooms-on-leave.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/rooms-on-leave.yml) |
 | <strong>Games</strong> | |
+| Flyingdarts-Games-X01-OnCreate | [![Deploy Games X01 OnCreate](https://github.com/flyingdarts/Flyingdarts.Backend/actions/workflows/games-x01-onCreate.yml/badge.svg)](https://github.com/flyingdarts/Flyingdarts.Backend/actions/workflows/games-x01-onCreate.yml) |
 | Flyingdarts-Games-X01-OnScore | [![Deploy Games X01 OnScore](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/games-x01-onScore.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/games-x01-onScore.yml) |
 | Flyingdarts-Games-X01-OnQueue | [![Deploy Games X01 OnQueue](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/games-x01-onQueue.yml/badge.svg)](https://github.com/flyingdarts/IYLTDSU.Signalling/actions/workflows/games-x01-onQueue.yml) |
 | <strong>Checks</strong> | |
