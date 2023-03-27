@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<PublishReadyToRun>true</PublishReadyToRun>
+
+	</PropertyGroup>
+	<ItemGroup>
+	    <ProjectReference Include="..\..\Core\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
+	    <ProjectReference Include="..\..\Core\Flyingdarts.Services\Flyingdarts.Services.csproj" />
+	    <ProjectReference Include="..\..\Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+	</ItemGroup>
+</Project>

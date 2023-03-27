@@ -1,0 +1,32 @@
+name: "Deploy Games X01 OnCreate"
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  OnConnect:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: Install Amazon.Lambda.Tools
+        run: |
+          dotnet tool install -g Amazon.Lambda.Tools
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy function
+        working-directory: "Lambdas/Flyingdarts-Games-X01-OnCreate"
+        run: |
+          dotnet lambda deploy-function --function-name Flyingdarts-Games-X01-OnCreate -frun dotnet6 -f net6.0 --region eu-west-1

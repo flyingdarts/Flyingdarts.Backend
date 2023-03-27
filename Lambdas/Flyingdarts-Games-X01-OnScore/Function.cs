@@ -1,3 +1,5 @@
+using Flyingdarts.Requests.Games.X01;
+
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 var dynamoDbClient = new AmazonDynamoDBClient();
 var tableName = Environment.GetEnvironmentVariable("TableName")!;

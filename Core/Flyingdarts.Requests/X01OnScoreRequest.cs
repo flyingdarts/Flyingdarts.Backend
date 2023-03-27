@@ -1,5 +1,5 @@
 ﻿
-namespace Flyingdarts.Requests.Games.X01.OnScore;
+namespace Flyingdarts.Requests.Games.X01;
 public class X01OnScoreRequest
 {
     public string RoomId { get; set; }

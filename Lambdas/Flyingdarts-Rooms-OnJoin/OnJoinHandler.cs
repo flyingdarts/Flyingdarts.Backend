@@ -34,11 +34,7 @@ public class OnJoinHandler
 
     }
     
-    public static async Task<bool> UpdateItemAsync(
-        AmazonDynamoDBClient client,
-        string connectionId,
-        JoinRoomRequest request,
-        string tableName)
+    public static async Task<bool> UpdateItemAsync(AmazonDynamoDBClient client, string connectionId, JoinRoomRequest request, string tableName)
     {
         var key = new Dictionary<string, AttributeValue>
         {

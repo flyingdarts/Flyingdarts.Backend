@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".workflows", ".workflows", 
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql.yml = .github\workflows\codeql.yml
 		Directory.Build.props = Directory.Build.props
+		.github\workflows\games-x01-onCreate.yml = .github\workflows\games-x01-onCreate.yml
 		.github\workflows\games-x01-onQueue.yml = .github\workflows\games-x01-onQueue.yml
 		.github\workflows\games-x01-onScore.yml = .github\workflows\games-x01-onScore.yml
 		.github\workflows\on-connect.yml = .github\workflows\on-connect.yml
@@ -58,6 +59,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C3923452-2
 	ProjectSection(SolutionItems) = preProject
 		Core\Directory.Build.props = Core\Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Games-X01-OnCreate", "Lambdas\Flyingdarts-Games-X01-OnCreate\Flyingdarts-Games-X01-OnCreate.csproj", "{47849CB1-88AE-45F6-B304-ED4BD013484F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts-Games-X01-OnCreate.Tests", "Lambdas\Flyingdarts-Games-X01-OnCreate.Tests\Flyingdarts-Games-X01-OnCreate.Tests.csproj", "{BD123FCF-F124-4BDA-932C-DAD216592CEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,6 +230,30 @@ Global
 		{B50333FD-0A32-4EC0-A34E-B0929237AFD7}.Release|x64.Build.0 = Release|Any CPU
 		{B50333FD-0A32-4EC0-A34E-B0929237AFD7}.Release|x86.ActiveCfg = Release|Any CPU
 		{B50333FD-0A32-4EC0-A34E-B0929237AFD7}.Release|x86.Build.0 = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|x64.Build.0 = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Debug|x86.Build.0 = Debug|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|x64.ActiveCfg = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|x64.Build.0 = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|x86.ActiveCfg = Release|Any CPU
+		{47849CB1-88AE-45F6-B304-ED4BD013484F}.Release|x86.Build.0 = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|x64.Build.0 = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Debug|x86.Build.0 = Debug|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|x64.ActiveCfg = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|x64.Build.0 = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|x86.ActiveCfg = Release|Any CPU
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -245,6 +274,8 @@ Global
 		{AE88B011-6393-461A-A57E-A7DB97B38B83} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
 		{ED82D805-E651-4B0F-981B-1E838C48CE5F} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
 		{B50333FD-0A32-4EC0-A34E-B0929237AFD7} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
+		{47849CB1-88AE-45F6-B304-ED4BD013484F} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
+		{BD123FCF-F124-4BDA-932C-DAD216592CEE} = {A0A98CD2-1F52-4658-ACAA-981F809BBBD9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE7BB26A-830D-4676-ACCB-6F524522BDFD}

@@ -1,4 +1,6 @@
-﻿namespace Flyingdarts.Games.X01.OnScore;
+﻿using Flyingdarts.Requests.Games.X01;
+
+namespace Flyingdarts.Games.X01.OnScore;
 public class OnScoreHandler
 {
     private readonly string _tableName;
