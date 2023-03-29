@@ -182,7 +182,7 @@ public class DiscordIntegrationHandler
     }
     private bool TokenIsNotPresent(out string tokenValue)
     {
-        tokenValue = Environment.GetEnvironmentVariable("DISCORD_BOT_TOKEN");
+        tokenValue = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
         return tokenValue is not null;
     }
 }
