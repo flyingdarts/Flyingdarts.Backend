@@ -1,5 +1,4 @@
 ﻿// ReSharper disable once CheckNamespace
-using System.Collections.Generic;
 
 namespace Flyingdarts.Business.X01;
 public record GetLatestGamesQuery(long GameId) : IRequest<List<Game>>;

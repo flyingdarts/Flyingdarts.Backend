@@ -1,5 +1,4 @@
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
 
 namespace Flyingdarts.Services.X01;
 

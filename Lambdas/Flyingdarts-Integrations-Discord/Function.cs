@@ -1,7 +1,9 @@
 
 
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
-var innerHandler = new DiscordIntegrationHandler();
+var clientConfig = new DiscordSocketConfig { MessageCacheSize = 50 };
+var client = new DiscordSocketClient(clientConfig);
+var innerHandler = new DiscordIntegrationHandler(client);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
