@@ -19,7 +19,7 @@ public class DiscordIntegrationHandler
         if (!request.Headers.TryGetValue("x-signature-timestamp", out timestampValue))
             throw new InvalidHttpInteractionException("Signature header not present!");
         if (PublicKeyIsNotPresent(out publicKeyValue) || TokenIsNotPresent(out tokenValue))
-            throw new InvalidHttpInteractionException("Public is not present!");
+            throw new InvalidHttpInteractionException("PublicKey or Token not present!");
 
         _client = new DiscordSocketClient(new DiscordSocketConfig
         {

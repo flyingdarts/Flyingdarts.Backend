@@ -1,4 +1,4 @@
-name: "Deploy Discord Bot"
+name: "Deploy Serverless Discord Bot"
 on:
   push:
     branches: [ main ]
@@ -32,3 +32,4 @@ jobs:
           dotnet lambda deploy-function --function-name Flyingdarts-Integrations-Discord -frun dotnet6 -f net6.0 --region eu-west-1
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_BOT_PUBLIC_KEY: ${{ secrets.DISCORD_BOT_PUBLIC_KEY }}
