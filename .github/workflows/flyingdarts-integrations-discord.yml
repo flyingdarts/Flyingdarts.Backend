@@ -29,4 +29,6 @@ jobs:
       - name: Deploy function
         working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
         run: |
-          dotnet lambda deploy-function --function-name Flyingdarts-Integrations-Discord -frun dotnet6 -f net6.0 --region eu-west-1 --environment "Variables={DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}}"
+          dotnet lambda deploy-function --function-name Flyingdarts-Integrations-Discord -frun dotnet6 -f net6.0 --region eu-west-1
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
