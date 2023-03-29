@@ -1,5 +1,3 @@
-global using Amazon.ApiGatewayManagementApi;
-global using Amazon.DynamoDBv2;
 global using Amazon.Lambda.APIGatewayEvents;
 global using Amazon.Lambda.Core;
 global using Amazon.Lambda.RuntimeSupport;

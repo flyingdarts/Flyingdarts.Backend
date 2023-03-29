@@ -7,12 +7,16 @@ namespace Flyingdarts.Integrations.Discord;
 
 public class LoggingService
 {
+    public static LoggingService Instance(DiscordSocketClient client, CommandService command)
+    {
+        return new LoggingService(client, command);
+    }
     public LoggingService(DiscordSocketClient client, CommandService command)
     {
         client.Log += LogAsync;
         command.Log += LogAsync;
     }
-    private Task LogAsync(LogMessage message)
+    public Task LogAsync(LogMessage message)
     {
         if (message.Exception is CommandException cmdException)
         {

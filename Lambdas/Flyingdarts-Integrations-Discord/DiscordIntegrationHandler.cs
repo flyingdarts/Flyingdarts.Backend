@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Threading;
+using Amazon.Runtime.Internal;
 
 namespace Flyingdarts.Integrations.Discord;
 
@@ -10,8 +11,16 @@ public class DiscordIntegrationHandler
     private readonly IServiceProvider _services;
     public DiscordIntegrationHandler() { }
 
-    public DiscordIntegrationHandler(DiscordSocketClient socketClient)
+    public DiscordIntegrationHandler(DiscordSocketClient socketClient, APIGatewayProxyRequest request)
     {
+        string signatureValue, timestampValue, publicKeyValue, tokenValue;
+        if (!request.Headers.TryGetValue("x-signature-ed25519", out signatureValue))
+            throw new InvalidHttpInteractionException("Signature header not present!");
+        if (!request.Headers.TryGetValue("x-signature-timestamp", out timestampValue))
+            throw new InvalidHttpInteractionException("Signature header not present!");
+        if (PublicKeyIsNotPresent(out publicKeyValue) || TokenIsNotPresent(out tokenValue))
+            throw new InvalidHttpInteractionException("Public is not present!");
+
         _client = new DiscordSocketClient(new DiscordSocketConfig
         {
             // How much logging do you want to see?
@@ -25,8 +34,12 @@ public class DiscordIntegrationHandler
             // If your platform doesn't have native WebSockets,
             // add Discord.Net.Providers.WS4Net from NuGet,
             // add the `using` at the top, and uncomment this line:
-            //WebSocketProvider = WS4NetProvider.Instance
+            // WebSocketProvider = WS4NetProvider.Instance
         });
+
+        if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, request.Body))
+            throw new InvalidHttpInteractionException("Invalid http interaction!");
+
         _commands = new CommandService(new CommandServiceConfig
         {
             // Again, log level:
@@ -38,27 +51,40 @@ public class DiscordIntegrationHandler
         });
 
         // Subscribe the logging handler to both the client and the CommandService.
-        _client.Log += Log;
-        _commands.Log += Log;
+        var log = LoggingService.Instance(_client, _commands);
+        _client.Log += log.LogAsync;
+        _commands.Log += log.LogAsync;
 
         // Setup your DI container.
         _services = ConfigureServices(_client, _commands);
 
-
+        Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
+
+    /// <summary>
+    /// Handles the incoming request.
+    /// </summary>
+    /// <param name="request">The incoming request message.</param>
+    /// <param name="context">The Lambda context.</param>
+    /// <returns>An APIGatewayProxyResponse object representing the response to the request.</returns>
     public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<DiscordIntegrationRequest> request, ILambdaContext context)
     {
         try
         {
+            // Check if the request is a ping event
             if (request.Message is not null && request.Message.Type != 1)
                 return Responses.InternalServerError("Ping pong failure");
+
+            // Return a response with a serialized ping-pong object
             return Responses.Created(JsonSerializer.Serialize(DiscordIntegrationRequest.PingPong));
         }
         catch (Exception e)
         {
+            // If an exception is caught, return an error response with the error message
             return Responses.InternalServerError($"Failed to send message: {e.Message}");
         }
     }
+
     // If any services require the client, or the CommandService, or something else you keep on hand,
     // pass them as parameters into this method as needed.
     // If this method is getting pretty long, you can seperate it out into another file using partials.
@@ -79,9 +105,7 @@ public class DiscordIntegrationHandler
     // that ask for a Func<LogMessage, Task>.
     private static Task Log(LogMessage message)
     {
-        
         Console.ResetColor();
-
         // If you get an error saying 'CompletedTask' doesn't exist,
         // your project is targeting .NET 4.5.2 or lower. You'll need
         // to adjust your project's target framework to 4.6 or higher
@@ -90,19 +114,17 @@ public class DiscordIntegrationHandler
         // the alternative is to 'return Task.Delay(0);' instead.
         return Task.CompletedTask;
     }
-    private async Task MainAsync()
+    private async Task MainAsync(string token)
     {
         // Centralize the logic for commands into a separate method.
         await InitCommands();
 
         // Login and connect.
-        await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("DISCORD_TOKEN"));
+        await _client.LoginAsync(TokenType.Bot, token);
         await _client.StartAsync();
 
         // Wait infinitely so your bot actually stays connected.
         await Task.Delay(Timeout.Infinite);
-
-        throw new NotImplementedException();
     }
 
     private async Task InitCommands()
@@ -152,4 +174,27 @@ public class DiscordIntegrationHandler
             //    await msg.Channel.SendMessageAsync(result.ErrorReason);
         }
     }
+
+    private bool PublicKeyIsNotPresent(out string publicKeyValue)
+    {
+        publicKeyValue = Environment.GetEnvironmentVariable("DISCORD_BOT_PUBLIC_KEY");
+        return publicKeyValue is not null;
+    }
+    private bool TokenIsNotPresent(out string tokenValue)
+    {
+        tokenValue = Environment.GetEnvironmentVariable("DISCORD_BOT_TOKEN");
+        return tokenValue is not null;
+    }
+}
+
+public class InvalidHttpInteractionException : Exception
+{
+    public InvalidHttpInteractionException(string message):base(message)
+    {
+
+    }
+}
+public  class APIGatewayProxyRequestExtensions
+{
+   
 }
