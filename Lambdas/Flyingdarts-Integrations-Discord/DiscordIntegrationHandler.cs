@@ -178,12 +178,12 @@ public class DiscordIntegrationHandler
     private bool PublicKeyIsNotPresent(out string publicKeyValue)
     {
         publicKeyValue = Environment.GetEnvironmentVariable("DISCORD_BOT_PUBLIC_KEY");
-        return publicKeyValue is not null;
+        return publicKeyValue is null;
     }
     private bool TokenIsNotPresent(out string tokenValue)
     {
         tokenValue = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
-        return tokenValue is not null;
+        return tokenValue is null;
     }
 }
 
