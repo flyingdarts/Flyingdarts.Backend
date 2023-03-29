@@ -1,21 +1,31 @@
-﻿using System.Reflection;
+﻿using Amazon.Lambda.APIGatewayEvents;
+using Flyingdarts.Requests;
+using Flyingdarts.Shared;
+using System;
+using System.Reflection;
+using System.Text.Json;
 using System.Threading;
-using Amazon.Runtime.Internal;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Flyingdarts.Integrations.Discord;
-
-public class DiscordIntegrationHandler
+public class IntegrationHandler
 {
     private readonly DiscordSocketClient _client;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
-    public DiscordIntegrationHandler() { }
 
-    public DiscordIntegrationHandler(DiscordSocketClient socketClient, APIGatewayProxyRequest request)
+    public IntegrationHandler() { }
+
+    public IntegrationHandler(APIGatewayProxyRequest request)
     {
         string signatureValue, timestampValue, publicKeyValue, tokenValue;
+        // Ensure header contains the signature value
         if (!request.Headers.TryGetValue("x-signature-ed25519", out signatureValue))
             throw new InvalidHttpInteractionException("Signature header not present!");
+        // Ensure custom header with signature timestamp 
         if (!request.Headers.TryGetValue("x-signature-timestamp", out timestampValue))
             throw new InvalidHttpInteractionException("Signature header not present!");
         if (PublicKeyIsNotPresent(out publicKeyValue) || TokenIsNotPresent(out tokenValue))
@@ -61,13 +71,7 @@ public class DiscordIntegrationHandler
         Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
 
-    /// <summary>
-    /// Handles the incoming request.
-    /// </summary>
-    /// <param name="request">The incoming request message.</param>
-    /// <param name="context">The Lambda context.</param>
-    /// <returns>An APIGatewayProxyResponse object representing the response to the request.</returns>
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<DiscordIntegrationRequest> request, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<DiscordIntegrationRequest> request)
     {
         try
         {
@@ -185,16 +189,4 @@ public class DiscordIntegrationHandler
         tokenValue = Environment.GetEnvironmentVariable("DISCORD_TOKEN");
         return tokenValue is null;
     }
-}
-
-public class InvalidHttpInteractionException : Exception
-{
-    public InvalidHttpInteractionException(string message):base(message)
-    {
-
-    }
-}
-public  class APIGatewayProxyRequestExtensions
-{
-   
 }

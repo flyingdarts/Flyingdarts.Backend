@@ -1,4 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+		<AWSProjectType>Lambda</AWSProjectType>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<GlobalUsings>disabled</GlobalUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Discord.Net" Version="3.10.0" />
+		<PackageReference Include="MediatR" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.2.23128.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Amazon.Lambda.Core" Version="2.1.0" />
+		<PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
+		<PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.8.6" />
+		<PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.3.1" />
+		<PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.100.100" />
+		<PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.102.14" />
+	</ItemGroup>
 	<ItemGroup>
     <ProjectReference Include="..\..\Core\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
     <ProjectReference Include="..\..\Core\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />

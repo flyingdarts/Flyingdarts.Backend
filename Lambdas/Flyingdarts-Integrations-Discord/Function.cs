@@ -1,14 +1,16 @@
-
+using Amazon.Lambda.APIGatewayEvents;
+using Amazon.Lambda.Core;
+using Amazon.Lambda.RuntimeSupport;
+using Amazon.Lambda.Serialization.SystemTextJson;
+using Flyingdarts.Shared;
 
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
-var clientConfig = new DiscordSocketConfig { MessageCacheSize = 50 };
-var client = new DiscordSocketClient(clientConfig);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    var innerHandler = new DiscordIntegrationHandler(client, request);
-    var socketRequest = request.To<DiscordIntegrationRequest>(serializer);
-    return await innerHandler.Handle(socketRequest, context);
+    var innerHandler = new IntegrationHandler(request);
+    var incomingWebhookRequest = request.ToDiscordWebhookRequest(serializer);
+    return await innerHandler.Handle(incomingWebhookRequest);
 };
 
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())

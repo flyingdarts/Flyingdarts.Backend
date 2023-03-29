@@ -2,4 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>Flyingdarts.Shared</RootNamespace>
 	</PropertyGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
+	</ItemGroup>
 </Project>
