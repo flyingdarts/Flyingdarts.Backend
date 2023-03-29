@@ -2,7 +2,6 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<PublishReadyToRun>true</PublishReadyToRun>
-
 	</PropertyGroup>
 	<ItemGroup>
 	    <ProjectReference Include="..\..\Core\Flyingdarts.Requests\Flyingdarts.Requests.csproj" />
