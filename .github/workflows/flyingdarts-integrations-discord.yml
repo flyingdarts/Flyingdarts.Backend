@@ -48,4 +48,4 @@ jobs:
           gh gist edit 12e208b3d431ef737ead99967522ceea --filename LoggingService.cs
           gh gist edit 12e208b3d431ef737ead99967522ceea --filename Flyingdarts-Integrations-Discord.csproj
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
