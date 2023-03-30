@@ -11,18 +11,20 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Discord.Rest;
+using System.Reactive;
 
 public class IntegrationHandler
 {
     private readonly DiscordSocketClient _client;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
+    public string signatureValue, timestampValue, publicKeyValue, tokenValue;
 
     public IntegrationHandler() { }
 
     public IntegrationHandler(APIGatewayProxyRequest request)
     {
-        string signatureValue, timestampValue, publicKeyValue, tokenValue;
         // Ensure header contains the signature value
         if (!request.Headers.TryGetValue("x-signature-ed25519", out signatureValue))
             throw new InvalidHttpInteractionException("Signature header not present!");
@@ -48,9 +50,6 @@ public class IntegrationHandler
             // WebSocketProvider = WS4NetProvider.Instance
         });
 
-        if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, Encoding.UTF8.GetBytes(request.Body)))
-            throw new InvalidHttpInteractionException("Invalid http interaction!");
-
         _commands = new CommandService(new CommandServiceConfig
         {
             // Again, log level:
@@ -72,13 +71,23 @@ public class IntegrationHandler
         Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(IAmAMessage<DiscordIntegrationRequest> request)
+    public async Task<APIGatewayProxyResponse> Handle(string discordBody)
     {
         try
         {
-            // Check if the request is a ping event
-            if (request.Message is not null && request.Message.Type != 1)
-                return Responses.InternalServerError("Ping pong failure");
+            if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, discordBody))
+            {
+                return new APIGatewayProxyResponse { StatusCode = 400, Body = "Invalid Interaction Signature!" };
+
+            }
+
+            RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
+
+            if (interaction is RestPingInteraction pingInteraction)
+            {
+                return new APIGatewayProxyResponse { StatusCode = 200, Body = pingInteraction.AcknowledgePing() };
+            }
+            // handle command 
 
             // Return a response with a serialized ping-pong object
             return Responses.Created(JsonSerializer.Serialize(DiscordIntegrationRequest.PingPong));

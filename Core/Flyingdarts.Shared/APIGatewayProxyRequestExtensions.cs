@@ -16,15 +16,13 @@ public static class APIGatewayProxyRequestExtensions
         return deserializedResponse;
     }
 
-    public static IAmAMessage<DiscordIntegrationRequest> ToDiscordWebhookRequest(this APIGatewayProxyRequest request, ILambdaSerializer serializer)
+    public static string ToDiscordBody(this APIGatewayProxyRequest request, ILambdaSerializer serializer)
     {
         if (string.IsNullOrWhiteSpace(request.Body))
             return null;
 
         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(request.Body));
-        var deserializedResponse = serializer.Deserialize<IAmAMessage<DiscordIntegrationRequest>>(ms);
-        deserializedResponse.ConnectionId = request.RequestContext.ConnectionId;
-
+        var deserializedResponse = serializer.Deserialize<string>(ms);
         return deserializedResponse;
 
     }
