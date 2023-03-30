@@ -46,7 +46,7 @@ public class DiscordIntegrationRequest
     [JsonPropertyName("resource-path")]
     public string ResourcePath { get; set; }
 
-    public static DiscordIntegrationRequest FromApiGatewayProxyRequest(APIGatewayProxyRequest request, ILambdaContext context)
+    public static DiscordIntegrationRequest FromApiGatewayProxyRequest(APIGatewayProxyRequest request)
     {
         return new DiscordIntegrationRequest
         {

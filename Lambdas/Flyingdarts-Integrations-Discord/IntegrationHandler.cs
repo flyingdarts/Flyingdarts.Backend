@@ -72,8 +72,8 @@ public class IntegrationHandler
             if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, discordBody))
             {
                 return new APIGatewayProxyResponse { StatusCode = 400, Body = $"Invalid Interaction Signature! {discordBody}" };
-
             }
+
             RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
 
             if (interaction is RestPingInteraction pingInteraction)
