@@ -38,14 +38,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Update Gist
-        uses: gist-sync/gist-sync@v2
-        with:
-          gist_id: 12e208b3d431ef737ead99967522ceea
+      - name: Create or Update Gist
+        working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
+        run: |
+          gh gist edit 12e208b3d431ef737ead99967522ceea --files Function.cs,IntegrationHandler.cs,InvalidHttpInteractionException.cs,LoggingService.cs,Bot.csproj
+        env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: |
-            Lambdas/Flyingdarts-Integrations-Discord/Function.cs:/gist/Function.cs
-            Lambdas/Flyingdarts-Integrations-Discord/IntegrationHandler.cs:/gist/IntegrationHandler.cs
-            Lambdas/Flyingdarts-Integrations-Discord/InvalidHttpInteractionException.cs:/gist/InvalidHttpInteractionException.cs
-            Lambdas/Flyingdarts-Integrations-Discord/LoggingService.cs:/gist/LoggingService.cs
-            Lambdas/Flyingdarts-Integrations-Discord/Flyingdarts-Integrations-Discord.csproj:/gist/Bot.csproj
