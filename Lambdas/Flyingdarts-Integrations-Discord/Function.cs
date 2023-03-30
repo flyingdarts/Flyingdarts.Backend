@@ -10,7 +10,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var originalDiscordRequest = DiscordIntegrationRequest.FromApiGatewayProxyRequest(request, context);
     var innerHandler = new IntegrationHandler(request);
-    return await innerHandler.Handle(JsonSerializer.Serialize(originalDiscordRequest));
+    return await innerHandler.Handle(originalDiscordRequest.RawBody);
 };
 
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
