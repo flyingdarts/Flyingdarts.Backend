@@ -3,6 +3,7 @@ using Flyingdarts.Requests;
 using Flyingdarts.Shared;
 using System;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ public class IntegrationHandler
             // WebSocketProvider = WS4NetProvider.Instance
         });
 
-        if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, request.Body))
+        if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, Encoding.UTF8.GetBytes(request.Body)))
             throw new InvalidHttpInteractionException("Invalid http interaction!");
 
         _commands = new CommandService(new CommandServiceConfig
