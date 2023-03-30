@@ -65,8 +65,6 @@ public class IntegrationHandler
 
         // Setup your DI container.
         _services = ConfigureServices(_client, _commands);
-
-        Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
     public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody)
     {
@@ -84,6 +82,7 @@ public class IntegrationHandler
                 return new APIGatewayProxyResponse { StatusCode = 200, Body = pingInteraction.AcknowledgePing() };
             }
             // handle command 
+            await MainAsync(tokenValue);
 
             // Return a response with a serialized ping-pong object
             return Responses.Created("Yhuy");
@@ -111,19 +110,6 @@ public class IntegrationHandler
         return services.BuildServiceProvider(true);
     }
 
-    // Example of a logging handler. This can be re-used by addons
-    // that ask for a Func<LogMessage, Task>.
-    private static Task Log(LogMessage message)
-    {
-        Console.ResetColor();
-        // If you get an error saying 'CompletedTask' doesn't exist,
-        // your project is targeting .NET 4.5.2 or lower. You'll need
-        // to adjust your project's target framework to 4.6 or higher
-        // (instructions for this are easily Googled).
-        // If you *need* to run on .NET 4.5 for compat/other reasons,
-        // the alternative is to 'return Task.Delay(0);' instead.
-        return Task.CompletedTask;
-    }
     private async Task MainAsync(string token)
     {
         // Centralize the logic for commands into a separate method.
@@ -171,17 +157,7 @@ public class IntegrationHandler
         {
             // Create a Command Context.
             var context = new SocketCommandContext(_client, msg);
-
-            // Execute the command. (result does not indicate a return value, 
-            // rather an object stating if the command executed successfully).
-            var result = await _commands.ExecuteAsync(context, pos, _services);
-
-            // Uncomment the following lines if you want the bot
-            // to send a message if it failed.
-            // This does not catch errors from commands with 'RunMode.Async',
-            // subscribe a handler for '_commands.CommandExecuted' to see those.
-            //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-            //    await msg.Channel.SendMessageAsync(result.ErrorReason);
+            await context.Channel.SendMessageAsync("Ah yeet!");
         }
     }
 
