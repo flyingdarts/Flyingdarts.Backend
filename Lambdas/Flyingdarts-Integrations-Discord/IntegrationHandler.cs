@@ -68,7 +68,7 @@ public class IntegrationHandler
 
         Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
-    public async Task<APIGatewayProxyResponse> Handle(string discordBody)
+    public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody)
     {
         try
         {
