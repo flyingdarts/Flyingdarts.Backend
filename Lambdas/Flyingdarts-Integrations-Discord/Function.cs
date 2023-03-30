@@ -5,7 +5,6 @@ using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Flyingdarts.Requests;
 
-var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 // ReSharper disable once ConvertToLocalFunction
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
