@@ -40,7 +40,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Update Function.cs Gist
-      uses: gorbus/gist-actions@main
+      uses: gorgbus/gist-actions@main
       with:
         name: Function.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
@@ -48,7 +48,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update IntegrationHandler.cs Gist
-      uses: gorbus/gist-actions@main
+      uses: gorgbus/gist-actions@main
       with:
         name: IntegrationHandler.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
@@ -56,7 +56,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update InvalidHttpInteractionException.cs Gist
-      uses: gorbus/gist-actions@main
+      uses: gorgbus/gist-actions@main
       with:
         name: InvalidHttpInteractionException.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
@@ -64,7 +64,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update LoggingService.cs Gist
-      uses: gorbus/gist-actions@main
+      uses: gorgbus/gist-actions@main
       with:
         name: LoggingService.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
@@ -72,7 +72,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update Flyingdarts-Integrations-Discord.csproj Gist
-      uses: gorbus/gist-actions@main
+      uses: gorgbus/gist-actions@main
       with:
         name: Flyingdarts-Integrations-Discord.csproj
         gist_id: 12e208b3d431ef737ead99967522ceea
