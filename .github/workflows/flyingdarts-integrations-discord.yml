@@ -41,6 +41,10 @@ jobs:
       - name: Create or Update Gist
         working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
         run: |
-          gh gist edit 12e208b3d431ef737ead99967522ceea --files Function.cs,IntegrationHandler.cs,InvalidHttpInteractionException.cs,LoggingService.cs,Bot.csproj
+          gh gist edit 12e208b3d431ef737ead99967522ceea --filename Function.cs
+          gh gist edit 12e208b3d431ef737ead99967522ceea --filename IntegrationHandler.cs
+          gh gist edit 12e208b3d431ef737ead99967522ceea --filename InvalidHttpInteractionException.cs
+          gh gist edit 12e208b3d431ef737ead99967522ceea --filename LoggingService.cs
+          gh gist edit 12e208b3d431ef737ead99967522ceea --filename Flyingdarts-Integrations-Discord.csproj
         env:
           github_token: ${{ secrets.GITHUB_TOKEN }}
