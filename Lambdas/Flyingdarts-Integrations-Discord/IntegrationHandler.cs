@@ -1,10 +1,7 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Requests;
 using Flyingdarts.Shared;
 using System;
 using System.Reflection;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
@@ -12,14 +9,15 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Rest;
-using System.Reactive;
+using Flyingdarts.Requests;
 
 public class IntegrationHandler
 {
     private readonly DiscordSocketClient _client;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
-    public string signatureValue, timestampValue, publicKeyValue, tokenValue;
+    public string signatureValue, timestampValue;
+    public string publicKeyValue, tokenValue;
 
     public IntegrationHandler() { }
 
@@ -70,7 +68,6 @@ public class IntegrationHandler
 
         Task.Run(() => MainAsync(tokenValue).GetAwaiter().GetResult());
     }
-
     public async Task<APIGatewayProxyResponse> Handle(string discordBody)
     {
         try
@@ -80,7 +77,6 @@ public class IntegrationHandler
                 return new APIGatewayProxyResponse { StatusCode = 400, Body = $"Invalid Interaction Signature! {discordBody}" };
 
             }
-
             RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
 
             if (interaction is RestPingInteraction pingInteraction)
@@ -90,7 +86,7 @@ public class IntegrationHandler
             // handle command 
 
             // Return a response with a serialized ping-pong object
-            return Responses.Created(JsonSerializer.Serialize(DiscordIntegrationRequest.PingPong));
+            return Responses.Created("Yhuy");
         }
         catch (Exception e)
         {
