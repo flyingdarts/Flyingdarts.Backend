@@ -40,38 +40,42 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Update Function.cs Gist
-      working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
-      run: |
-        content=$(cat Function.cs)
-        gh gist edit 12e208b3d431ef737ead99967522ceea --filename Function.cs --content "$content"
+      uses: orgbus/gist-actions@main
+      with:
+        name: Function.cs
+        gist_id: 12e208b3d431ef737ead99967522ceea
+        content_file: Lambdas/Flyingdarts-Integrations-Discord/Function.cs
       env:
-        GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update IntegrationHandler.cs Gist
-      working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
-      run: |
-        content=$(cat IntegrationHandler.cs)
-        gh gist edit 12e208b3d431ef737ead99967522ceea --filename IntegrationHandler.cs --content "$content"
+      uses: orgbus/gist-actions@main
+      with:
+        name: IntegrationHandler.cs
+        gist_id: 12e208b3d431ef737ead99967522ceea
+        content_file: Lambdas/Flyingdarts-Integrations-Discord/IntegrationHandler.cs
       env:
-        GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update InvalidHttpInteractionException.cs Gist
-      working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
-      run: |
-        content=$(cat InvalidHttpInteractionException.cs)
-        gh gist edit 12e208b3d431ef737ead99967522ceea --filename InvalidHttpInteractionException.cs --content "$content"
+      uses: orgbus/gist-actions@main
+      with:
+        name: InvalidHttpInteractionException.cs
+        gist_id: 12e208b3d431ef737ead99967522ceea
+        content_file: Lambdas/Flyingdarts-Integrations-Discord/InvalidHttpInteractionException.cs
       env:
-        GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update LoggingService.cs Gist
-      working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
-      run: |
-        content=$(cat LoggingService.cs)
-        gh gist edit 12e208b3d431ef737ead99967522ceea --filename LoggingService.cs --content "$content"
+      uses: orgbus/gist-actions@main
+      with:
+        name: LoggingService.cs
+        gist_id: 12e208b3d431ef737ead99967522ceea
+        content_file: Lambdas/Flyingdarts-Integrations-Discord/LoggingService.cs
       env:
-        GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update Flyingdarts-Integrations-Discord.csproj Gist
-      working-directory: "Lambdas/Flyingdarts-Integrations-Discord"
-      run: |
-        content=$(cat Flyingdarts-Integrations-Discord.csproj)
-        gh gist edit 12e208b3d431ef737ead99967522ceea --filename Flyingdarts-Integrations-Discord.csproj --content "$content"
+      uses: orgbus/gist-actions@main
+      with:
+        name: Flyingdarts-Integrations-Discord.csproj
+        gist_id: 12e208b3d431ef737ead99967522ceea
+        content_file: Lambdas/Flyingdarts-Integrations-Discord/Flyingdarts-Integrations-Discord.csproj
       env:
-        GH_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
-
+        GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
