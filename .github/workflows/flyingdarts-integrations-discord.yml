@@ -4,7 +4,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  OnConnect:
+  DeployDiscordBot:
     runs-on: ubuntu-22.04
     permissions:
       id-token: write
@@ -33,3 +33,19 @@ jobs:
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DISCORD_BOT_PUBLIC_KEY: ${{ secrets.DISCORD_BOT_PUBLIC_KEY }}
+  UpdatePublicGist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Update Gist
+        uses: gist-sync/gist-sync@v2
+        with:
+          gist_id: 12e208b3d431ef737ead99967522ceea
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            Lambdas/Flyingdarts-Integrations-Discord/Function.cs:/gist/Function.cs
+            Lambdas/Flyingdarts-Integrations-Discord/IntegrationHandler.cs:/gist/IntegrationHandler.cs
+            Lambdas/Flyingdarts-Integrations-Discord/InvalidHttpInteractionException.cs:/gist/InvalidHttpInteractionException.cs
+            Lambdas/Flyingdarts-Integrations-Discord/LoggingService.cs:/gist/LoggingService.cs
+            Lambdas/Flyingdarts-Integrations-Discord/Flyingdarts-Integrations-Discord.csproj:/gist/Bot.csproj
