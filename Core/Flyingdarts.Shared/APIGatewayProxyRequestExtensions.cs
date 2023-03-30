@@ -16,13 +16,13 @@ public static class APIGatewayProxyRequestExtensions
         return deserializedResponse;
     }
 
-    public static string ToDiscordBody(this APIGatewayProxyRequest request, ILambdaSerializer serializer)
+    public static DiscordIntegrationRequest ToDiscordBody(this APIGatewayProxyRequest request, ILambdaSerializer serializer)
     {
         if (string.IsNullOrWhiteSpace(request.Body))
             return null;
 
         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(request.Body));
-        var deserializedResponse = serializer.Deserialize<string>(ms);
+        var deserializedResponse = serializer.Deserialize<DiscordIntegrationRequest>(ms);
         return deserializedResponse;
 
     }

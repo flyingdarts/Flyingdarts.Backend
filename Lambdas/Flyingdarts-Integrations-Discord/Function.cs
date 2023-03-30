@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
@@ -10,7 +11,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var innerHandler = new IntegrationHandler(request);
     var incomingWebhookRequest = request.ToDiscordBody(serializer);
-    return await innerHandler.Handle(incomingWebhookRequest);
+    return await innerHandler.Handle(JsonSerializer.Serialize(incomingWebhookRequest));
 };
 
 await LambdaBootstrapBuilder.Create(handler, new DefaultLambdaJsonSerializer())
