@@ -42,40 +42,40 @@ jobs:
     - name: Update Function.cs Gist
       uses: gorgbus/gist-actions@main
       with:
-        name: Function.cs
+        file_name: Function.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
-        content_file: Lambdas/Flyingdarts-Integrations-Discord/Function.cs
+        content: Lambdas/Flyingdarts-Integrations-Discord/Function.cs
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update IntegrationHandler.cs Gist
       uses: gorgbus/gist-actions@main
       with:
-        name: IntegrationHandler.cs
+        file_name: IntegrationHandler.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
-        content_file: Lambdas/Flyingdarts-Integrations-Discord/IntegrationHandler.cs
+        content: Lambdas/Flyingdarts-Integrations-Discord/IntegrationHandler.cs
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update InvalidHttpInteractionException.cs Gist
       uses: gorgbus/gist-actions@main
       with:
-        name: InvalidHttpInteractionException.cs
+        file_name: InvalidHttpInteractionException.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
-        content_file: Lambdas/Flyingdarts-Integrations-Discord/InvalidHttpInteractionException.cs
+        content: Lambdas/Flyingdarts-Integrations-Discord/InvalidHttpInteractionException.cs
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update LoggingService.cs Gist
       uses: gorgbus/gist-actions@main
       with:
-        name: LoggingService.cs
+        file_name: LoggingService.cs
         gist_id: 12e208b3d431ef737ead99967522ceea
-        content_file: Lambdas/Flyingdarts-Integrations-Discord/LoggingService.cs
+        content: Lambdas/Flyingdarts-Integrations-Discord/LoggingService.cs
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
     - name: Update Flyingdarts-Integrations-Discord.csproj Gist
       uses: gorgbus/gist-actions@main
       with:
-        name: Flyingdarts-Integrations-Discord.csproj
+        file_name: Flyingdarts-Integrations-Discord.csproj
         gist_id: 12e208b3d431ef737ead99967522ceea
-        content_file: Lambdas/Flyingdarts-Integrations-Discord/Flyingdarts-Integrations-Discord.csproj
+        content: Lambdas/Flyingdarts-Integrations-Discord/Flyingdarts-Integrations-Discord.csproj
       env:
         GITHUB_TOKEN: ${{ secrets.GH_GIST_PAT_TOKEN }}
