@@ -9,7 +9,7 @@ var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensit
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     var innerHandler = new IntegrationHandler(request);
-    var incomingWebhookRequest = request.ToDiscordWebhookRequest(serializer);
+    var incomingWebhookRequest = request.ToDiscordBody(serializer);
     return await innerHandler.Handle(incomingWebhookRequest);
 };
 
