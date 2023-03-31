@@ -12,6 +12,7 @@ using Discord.Interactions;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Rest;
+using Amazon.Lambda.Core;
 
 public class IntegrationHandler
 {
@@ -34,36 +35,15 @@ public class IntegrationHandler
         _services = ConfigureServices();
     }
     private async Task LogAsync(LogMessage message) => Console.WriteLine(message.ToString());
-    public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody)
+    public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody, ILambdaContext context)
     {
         try
         {
-            var logClient = new AmazonCloudWatchLogsClient();
             var client = _services.GetRequiredService<DiscordSocketClient>();
-            var logGroupName = "/aws/Kakakakakakakakakakaka";
-            var logStreamName = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
-            var existing = await logClient
-                .DescribeLogGroupsAsync(new DescribeLogGroupsRequest()
-                    { LogGroupNamePrefix = logGroupName });
-            var logGroupExists = existing.LogGroups.Any(l => l.LogGroupName == logGroupName);
-            if (!logGroupExists)
-                await logClient.CreateLogGroupAsync(new CreateLogGroupRequest(logGroupName));
-            await logClient.CreateLogStreamAsync(new CreateLogStreamRequest(logGroupName, logStreamName));
-            await logClient.PutLogEventsAsync(new PutLogEventsRequest()
-            {
-                LogGroupName = logGroupName,
-                LogStreamName = logStreamName,
-                LogEvents = new List<InputLogEvent>()
-                {
-                    new()
-                    {
-                        Message = $"Kakakakakakakakakakaka",
-                        Timestamp = DateTime.UtcNow
-                    }
-                }
-            });
 
             client.Log += LogAsync;
+
+            client.Ready += () => Task.Run(() => context.Logger.Log("Client ready"));
 
             await _services.GetRequiredService<InteractionHandler>().InitializeAsync();
 
