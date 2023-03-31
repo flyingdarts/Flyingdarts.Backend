@@ -1,20 +1,13 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Shared;
 using System;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Auth.AccessControlPolicy.ActionIdentifiers;
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
-using Discord.Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Rest;
-using Flyingdarts.Requests;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 public class IntegrationHandler
 {
