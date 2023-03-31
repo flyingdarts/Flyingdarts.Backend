@@ -43,7 +43,7 @@ public class IntegrationHandler
 
             client.Log += LogAsync;
 
-            client.Ready += () => Task.Run(() => context.Logger.Log("Client ready"));
+            client.Ready += () => Task.Run(() => throw new Exception("Client ready"));
 
             await _services.GetRequiredService<InteractionHandler>().InitializeAsync();
 
