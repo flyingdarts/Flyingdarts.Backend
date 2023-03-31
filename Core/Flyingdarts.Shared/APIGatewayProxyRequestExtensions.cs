@@ -1,6 +1,4 @@
-﻿using Flyingdarts.Requests;
-
-namespace Flyingdarts.Shared;
+﻿namespace Flyingdarts.Shared;
 
 public static class APIGatewayProxyRequestExtensions
 {
