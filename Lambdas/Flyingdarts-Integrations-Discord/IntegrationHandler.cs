@@ -55,6 +55,8 @@ public class IntegrationHandler
 
         _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
 
+        _client.Ready += () => _interactionService.RegisterCommandsToGuildAsync(1013538880563183616);
+
     }
     public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody)
     {
@@ -68,7 +70,7 @@ public class IntegrationHandler
             await _client.LoginAsync(TokenType.Bot, tokenValue);
             await _client.StartAsync();
 
-            await _interactionService.RegisterCommandsToGuildAsync(1013538880563183616);
+            
 
             RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
 
