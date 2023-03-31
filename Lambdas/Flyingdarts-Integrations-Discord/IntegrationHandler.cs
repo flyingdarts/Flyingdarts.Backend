@@ -1,7 +1,11 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
 using Flyingdarts.Shared;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Amazon.CloudWatchLogs;
+using Amazon.CloudWatchLogs.Model;
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
@@ -11,9 +15,7 @@ using Discord.Rest;
 
 public class IntegrationHandler
 {
-    private readonly CommandService _commands;
     private readonly IServiceProvider _services;
-    private readonly InteractionService _interactionService;
 
     public string signatureValue, timestampValue;
     public string publicKeyValue, tokenValue;
@@ -36,7 +38,30 @@ public class IntegrationHandler
     {
         try
         {
+            var logClient = new AmazonCloudWatchLogsClient();
             var client = _services.GetRequiredService<DiscordSocketClient>();
+            var logGroupName = "/aws/Kakakakakakakakakakaka";
+            var logStreamName = DateTime.UtcNow.ToString("yyyyMMddHHmmssfff");
+            var existing = await logClient
+                .DescribeLogGroupsAsync(new DescribeLogGroupsRequest()
+                    { LogGroupNamePrefix = logGroupName });
+            var logGroupExists = existing.LogGroups.Any(l => l.LogGroupName == logGroupName);
+            if (!logGroupExists)
+                await logClient.CreateLogGroupAsync(new CreateLogGroupRequest(logGroupName));
+            await logClient.CreateLogStreamAsync(new CreateLogStreamRequest(logGroupName, logStreamName));
+            await logClient.PutLogEventsAsync(new PutLogEventsRequest()
+            {
+                LogGroupName = logGroupName,
+                LogStreamName = logStreamName,
+                LogEvents = new List<InputLogEvent>()
+                {
+                    new()
+                    {
+                        Message = $"Kakakakakakakakakakaka",
+                        Timestamp = DateTime.UtcNow
+                    }
+                }
+            });
 
             client.Log += LogAsync;
 
