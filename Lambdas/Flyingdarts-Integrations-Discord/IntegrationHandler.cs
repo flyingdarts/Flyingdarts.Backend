@@ -2,13 +2,19 @@
 using Flyingdarts.Shared;
 using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Amazon.Auth.AccessControlPolicy.ActionIdentifiers;
 using Discord;
 using Discord.Commands;
 using Discord.Interactions;
+using Discord.Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Discord.Rest;
+using Flyingdarts.Requests;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class IntegrationHandler
 {
@@ -31,46 +37,27 @@ public class IntegrationHandler
         if (PublicKeyIsNotPresent(out publicKeyValue) || TokenIsNotPresent(out tokenValue))
             throw new InvalidHttpInteractionException("PublicKey or Token not present!");
 
-        _client = new DiscordSocketClient(new DiscordSocketConfig
-        {
-            LogLevel = LogSeverity.Info,
-            MessageCacheSize = 50
-        });
-
-        _interactionService = new InteractionService(_client.Rest);
-
-        _commands = new CommandService(new CommandServiceConfig
-        {
-            // Again, log level:
-            LogLevel = LogSeverity.Info,
-            CaseSensitiveCommands = false,
-        });
-
-
-        var log = LoggingService.Instance(_client, _commands);
-        _client.Log += log.LogAsync;
-        _commands.Log += log.LogAsync;
-
-        _services = ConfigureServices(_client, _commands);
-
-        _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _services);
-
-        _client.Ready += () => _interactionService.RegisterCommandsToGuildAsync(1013538880563183616);
-
+        _services = ConfigureServices();
     }
+    private async Task LogAsync(LogMessage message) => Console.WriteLine(message.ToString());
     public async Task<APIGatewayProxyResponse> Handle(byte[] discordBody)
     {
         try
         {
+            var client = _services.GetRequiredService<DiscordSocketClient>();
+
+            client.Log += LogAsync;
+
+            await _services.GetRequiredService<InteractionHandler>().InitializeAsync();
+
+            await _client.LoginAsync(TokenType.Bot, tokenValue);
+
+            await _client.StartAsync();
+
             if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, discordBody))
             {
                 return new APIGatewayProxyResponse { StatusCode = 400, Body = $"Invalid Interaction Signature! {discordBody}" };
             }
-
-            await _client.LoginAsync(TokenType.Bot, tokenValue);
-            await _client.StartAsync();
-
-            
 
             RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
 
@@ -88,11 +75,14 @@ public class IntegrationHandler
     }
 
 
-    private static IServiceProvider ConfigureServices(DiscordSocketClient client, CommandService commandService)
+    private static IServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection()
-            .AddSingleton(new LoggingService(client, commandService));
-        return services.BuildServiceProvider(true);
+            .AddSingleton(x => new DiscordSocketClient(new DiscordSocketConfig
+                { LogLevel = LogSeverity.Info, MessageCacheSize = 50 }))
+            .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
+            .AddSingleton<InteractionHandler>();
+        return services.BuildServiceProvider();
     }
     
     private bool PublicKeyIsNotPresent(out string publicKeyValue)
