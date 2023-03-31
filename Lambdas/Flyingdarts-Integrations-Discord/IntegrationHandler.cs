@@ -63,7 +63,7 @@ public class IntegrationHandler
         }
         catch (Exception e)
         {
-            return Responses.InternalServerError($"Failed to send message: {e.Message}");
+            return Responses.InternalServerError(e.ToString());
         }
     }
 
