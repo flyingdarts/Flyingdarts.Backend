@@ -11,7 +11,6 @@ using Discord.Rest;
 
 public class IntegrationHandler
 {
-    private readonly DiscordSocketClient _client;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
     private readonly InteractionService _interactionService;
@@ -43,16 +42,16 @@ public class IntegrationHandler
 
             await _services.GetRequiredService<InteractionHandler>().InitializeAsync();
 
-            await _client.LoginAsync(TokenType.Bot, tokenValue);
+            await client.LoginAsync(TokenType.Bot, tokenValue);
 
-            await _client.StartAsync();
+            await client.StartAsync();
 
-            if (!_client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, discordBody))
+            if (!client.Rest.IsValidHttpInteraction(publicKeyValue, signatureValue, timestampValue, discordBody))
             {
                 return new APIGatewayProxyResponse { StatusCode = 400, Body = $"Invalid Interaction Signature! {discordBody}" };
             }
 
-            RestInteraction interaction = await _client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
+            RestInteraction interaction = await client.Rest.ParseHttpInteractionAsync(publicKeyValue, signatureValue, timestampValue, discordBody);
 
             if (interaction is RestPingInteraction pingInteraction)
             {
